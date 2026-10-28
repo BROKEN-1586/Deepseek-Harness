@@ -4,6 +4,13 @@
 > **版本号真身**：`D:\Clearn\VERSION`（单行，机器读）—— 本文件是**给人读的历史**，最新在最上面。
 > 每条必带四样：**改了什么 / 涉及文件 / 验证 / 备份**。没验证的改动标 `⚠️ 未验证` 且**不占版本号**。
 
+## Alpha 0.5.1 · 2026-10-28 · 三个子代理修好（模型路由）＋ 补 T43
+
+- **改了什么**：`~/.dsh/agents` 下三个自定义子代理的 `model:` 全部写死在不存在的 provider 上（`volc-ark-plan` / `digitalvolvo`），派发必报 `no adapter registered for provider` → 三份定义**删掉 `model:` 行改为继承部署默认**（`deepseek-account/deepseek-flash`）；顺带修正 `workhorse` 描述里并不存在的 `workhorse-gate` 声明，三份都补了「项目语境」（先读 `AGENTS.md`、成熟流程交 goose、改资产要升号、记忆归 goose）与真实边界（DSH 沙箱：只能写 `D:\Clearn`）；`问题汇总` 新增 **T43**
+- **涉及文件**：`C:\Users\36578\.dsh\agents\{workhorse,rubber-duck,oldfox}.md`、`问题汇总\问题汇总.md`、`CHANGELOG.md`、`VERSION`、`AGENTS.md`
+- **验证**：改后 `use_agent` 派发 workhorse / oldfox / rubber-duck 各一次，**全部正常返回**（改前三份都报 provider 不存在）；`问题汇总` 插入后 T43 与更新记录各 1 次；四个文件 `LF == CRLF`
+- **备份**：`D:\Clearn\_backup\agents-20261028-193347\`（三份原定义）、`D:\Clearn\_backup\agents-doc-20261028-193410\`
+
 ## Alpha 0.5.0 · 2026-10-28 · goose 执行守卫：危险命令拦截 ＋ 白名单 ＋ 审计
 
 - **改了什么**：`tools\goose_mcp.py` 加**四道闸** —— ① 危险命令识别（递归删除 / 磁盘分区 / 改写权限 / 删注册表服务计划任务 / 强制推送与丢弃改动 / 关机重启 / 碰系统目录 7 类，命中即拒绝且**不启动 goose**）② `workdir` 必须落在 `D:\Clearn` 之下 ③ `max_turns` 硬顶 40、`timeout_sec` 硬顶 1800 s ④ 每次调用写审计 `_diag\goose-audit.tsv`（时间 / 类型 / task 摘要 / 结果）。`DEEPCODE.md` 新增「🛡️ goose 执行守卫」节，`AGENTS.md` 脚本表与路由判定各标一处「守卫层归 DSH」
