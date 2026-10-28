@@ -1,0 +1,19 @@
+{
+  "tool": "cw_extract",
+  "channel": "alpha",
+  "channel_label": "开发中",
+  "version": "0.2.0",
+  "released_at": "2026-10-28 19:56:25",
+  "source": [
+    "D:\\Clearn\\tools\\cw_extract.py"
+  ],
+  "files": [
+    {
+      "name": "cw_extract.py",
+      "size": 2628,
+      "sha256": "9895d1b94f92c53bf530446a94b6d0d308c778d172dcfc633df50d6e00f56395"
+    }
+  ],
+  "git_head_before": "b36d0b38c9c8bcbce1de9713ca407dc2caf15363",
+  "python": "3.14.6"
+}
