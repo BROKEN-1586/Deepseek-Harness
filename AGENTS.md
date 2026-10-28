@@ -2,7 +2,7 @@
 
 > ⚠️ **本文件是「入口」，不是「真身」。**
 > **真身**：`D:\Clearn\DEEPCODE.md`（一直在维护，**不要在这里重复规则内容**）。
-> 🦢 当前运行框架 = **Goose**（2026-10-08 确认）。　🏷️ **当前版本：Alpha 0.4.1** —— 真身 `D:\Clearn\VERSION`（单行）＋ 历史 `CHANGELOG.md`。**每次有效改动都要升号**（用户 2026-10-28 定，规则见 `DEEPCODE.md`「🏷️ 版本号规则」；一个任务一只号、没验证不升、汇报第一行报版本）
+> 🦢 当前运行框架 = **Goose**（2026-10-08 确认）。　🏷️ **当前版本：Alpha 0.5.0** —— 真身 `D:\Clearn\VERSION`（单行）＋ 历史 `CHANGELOG.md`。**每次有效改动都要升号**（用户 2026-10-28 定，规则见 `DEEPCODE.md`「🏷️ 版本号规则」；一个任务一只号、没验证不升、汇报第一行报版本）
 
 ## 🔴 第一步（每次会话都做，别跳）
 
@@ -101,7 +101,7 @@
 | `D:\Clearn\tools\hw_from_courseware.py` | **课件首页作业页 → 候选条目**（2026-10-27 建）：扫 `01-课件\*\<日期>\` 或 `--file`，取 PDF/PPTX **前 3 页**抓「作业/习题」行，按内容判科目；**默认只打印候选**（符合「落盘前核对」），`--apply` 才写进作业池（截止标「待确认」、按课件出处去重） |
 | `D:\Clearn\tools\disk_audit.py` | **磁盘体检**（2026-10-27 建，**纯只读**）：占用/顶层体量榜/根目录散落文件/大文件榜（`--big` 阈值）/已知缓存点/空目录/备份区概况；`--root` 换盘、`--top` 控行数；结果落 `_diag\disk-audit.txt` |
 | `D:\Clearn\tools\backup_rotate.py` | **备份保留策略**（2026-10-27 建）：保留「最新 N 个（默认 20）**或** 最近 M 天（默认 14）」，其余可 `--mode zip`（打包校验非空才删原件）/ `--mode delete`；**默认 report 预演**；`legacy\`、`_archive\` 永不处理 |
-| `D:\Clearn\tools\goose_mcp.py` | **把 goose 包成 MCP server**（2026-10-28 建）：暴露 `run` / `recipes` / `info` 三个工具，底层 `goose run -q --no-session --output-format json`；供 DSH 等外部入口调用 |
+| `D:\Clearn\tools\goose_mcp.py` | **把 goose 包成 MCP server**（2026-10-28 建）：暴露 `run` / `recipes` / `info` 三个工具，底层 `goose run -q --no-session --output-format json`；供 DSH 等外部入口调用。**守卫层归 DSH**（危险命令拦截 / workdir 白名单 / max_turns 上限 / 审计 `_diag\goose-audit.tsv`，见 DEEPCODE「🛡️ goose 执行守卫」） |
 | `D:\Clearn\tools\dsh_mcp_preflight.py` | **DSH 侧 MCP 只读验收探针**（2026-10-28 建）：读 `cordis.patch.yml` 的 `insert:` 块，用最坏环境（无 `APPDATA` / `cwd=C:\Windows` / PATH 只剩 system32）真握手 `initialize → tools/list → tools/call`；DSH 升级后重跑即可 |
 | `D:\Clearn\tools\daily_0730.bat` | **每天 07:30 的零 token 体检**（2026-10-28 建）：计划任务 `ClearnDailyGate` 调用，顺序跑 `daily_gate.py` ＋ `followup.py`，日志追加 `_diag\daily-0730.log`；已内置 `chcp 65001` ＋ `PYTHONIOENCODING=utf-8` |
 | `D:\Clearn\tools\release.py` | **工具版本库**（2026-10-28 建）：把 `tools\` 下的脚本按**四通道**（alpha 开发中 / beta 优化中 / stable 稳定 / ultra 最终版）发布成 `releases\<工具>\<通道>-<版本>\` 快照 ＋ git commit ＋ tag；`publish` / `baseline` / `list` / `verify`，默认预演，`--apply` 才写。**归 goose 维护**（2026-10-28 用户定；DSH 只读，改动走 goose） |
@@ -140,6 +140,7 @@
 - **留在 DSH**：新能力试验、需求还没定型、Office / `.univer` 产出、要逐步判断的排查（例：2026-10-28 的权限问题）、以及「DSH 产出 → 沉淀成 `tools\*.py` / recipe」这一步本身
 - **交接要求**：task 必须自足（路径 / 日期 / 文件名 / 参数原样抄）＋ 写明**预期产物与验证判据**；goose 不共享本会话上下文
 - **判据只看「验没验证过」，不看「谁写的」**；成熟后同一件事**只留 goose 一处实现**（重叠区禁令照样适用）
+- **例外**：`tools\goose_mcp.py` 的**守卫层归 DSH** —— 约束不能由被约束方维护；其余 `tools\*.py` 照旧归 goose
 
 
 **两条纪律**：

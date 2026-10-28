@@ -251,6 +251,21 @@ python D:\Clearn\tools\release.py verify <工具> <通道>-<版本>
 
 **归属**：`release.py` 自身同样走四通道（首个版本 `release/alpha-0.1.0`），但**由 goose 维护**（2026-10-28 用户定）——DSH 对 `tools\*.py` 只读，要改这个脚本走 goose；DSH 仍可**调用**它（`publish` / `list` / `verify` 都是只读或走 goose 已建好的体例）。
 
+### 🛡️ goose 执行守卫（2026-10-28 定：**安全第一**）
+
+**位置**：`tools\goose_mcp.py`（DSH ↔ goose 的 MCP 桥）。**这一段归 DSH 维护** —— 约束不能交给被约束方，否则等于没有；goose 改不动它。
+
+| 闸 | 做法 | 命中后 |
+|---|---|---|
+| ① **危险命令识别** | task 文本匹配 7 类：递归删除（`rm -rf` / `rmdir /s` / `del /f` / `Remove-Item -Recurse` / `shutil.rmtree`）、磁盘 / 分区（`format` / `diskpart` / `clean all`）、改写权限（`icacls` / `takeown` / `cacls`）、删注册表 / 服务 / 计划任务（`reg delete` / `sc delete` / `schtasks /delete`）、强制推送或丢改动（`git push --force` / `git push -f` / `git reset --hard` / `git clean -f`）、关机重启（`shutdown` / `Restart-Computer`）、碰系统目录（`C:\Windows\` / `%windir%`） | 直接回「已拦截（安全约束）：<命中项>」，**不启动 goose、不耗 token** |
+| ② **工作目录白名单** | `workdir` 必须落在 `D:\Clearn` 之下 | 同上，拒绝并说明 |
+| ③ **规模上限** | `max_turns` 硬顶 **40**、`timeout_sec` 硬顶 1800 s | 超出按上限执行 |
+| ④ **审计留痕** | 每次都写 `_diag\goose-audit.tsv`：时间 / 类型（`RUN` / `BLOCKED` / `TIMEOUT` / `SPAWN_FAIL` / `BAD_WORKDIR`）/ task 摘要（120 字）/ 结果 | 写不进不影响任务本身 |
+
+**这条守卫管不到什么（别误会）**：它防的是**手滑**（一句话里带出 `rm -rf`、顺手 `--force` 推送），**不是防刻意绕过** —— 真要绕还能拼字符串。硬边界仍在两处、且要单独配：**Windows 账户权限**（goose 跑在用户令牌下，能写的目录就是你能写的）＋ **GitHub 分支保护**（别让人 force-push 掉历史）。
+
+**生效方式**：改完桥接脚本要 `mcp_manager_restart mcp-goose`（或重启 DSH）—— 已加载的 python 进程不会自己换代码。
+
 ## 🍳 固定流程的入口：Goose recipes（2026-10-08 新增）
 
 **8 个固定流程已落成 recipes**，文件在 `D:\Clearn\.goose\recipes\`（项目级；工作目录须为 `D:\Clearn` 才会被发现）：

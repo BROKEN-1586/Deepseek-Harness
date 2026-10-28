@@ -4,6 +4,14 @@
 > **版本号真身**：`D:\Clearn\VERSION`（单行，机器读）—— 本文件是**给人读的历史**，最新在最上面。
 > 每条必带四样：**改了什么 / 涉及文件 / 验证 / 备份**。没验证的改动标 `⚠️ 未验证` 且**不占版本号**。
 
+## Alpha 0.5.0 · 2026-10-28 · goose 执行守卫：危险命令拦截 ＋ 白名单 ＋ 审计
+
+- **改了什么**：`tools\goose_mcp.py` 加**四道闸** —— ① 危险命令识别（递归删除 / 磁盘分区 / 改写权限 / 删注册表服务计划任务 / 强制推送与丢弃改动 / 关机重启 / 碰系统目录 7 类，命中即拒绝且**不启动 goose**）② `workdir` 必须落在 `D:\Clearn` 之下 ③ `max_turns` 硬顶 40、`timeout_sec` 硬顶 1800 s ④ 每次调用写审计 `_diag\goose-audit.tsv`（时间 / 类型 / task 摘要 / 结果）。`DEEPCODE.md` 新增「🛡️ goose 执行守卫」节，`AGENTS.md` 脚本表与路由判定各标一处「守卫层归 DSH」
+- **归属**：守卫层**归 DSH**（约束不能交给被约束方）；其余 `tools\*.py` 照旧归 goose
+- **涉及文件**：`tools\goose_mcp.py`、`DEEPCODE.md`、`AGENTS.md`、`CHANGELOG.md`、`VERSION`
+- **验证**：`py_compile` 通过；7 条守卫用例单测全中（正常 task → 放行，`rm -rf` / `push --force` / `icacls` / `format` / `shutdown` / `D:\Windows\` → 分别命中对应类）；重启 MCP 后端到端实测：带 `rm -rf` 的 task 被秒拒（0 token），普通 task 正常返回；审计两行（`BLOCKED` / `RUN`）
+- **备份**：`D:\Clearn\_backup\guard-20261028-193055\`
+
 ## Alpha 0.4.1 · 2026-10-28 · 仓库接 GitHub ＋ release.py 归 goose
 
 - **改了什么**：① `git remote add origin https://github.com/BROKEN-1586/Deepseek-Harness.git`，`main` 与 **24 个版本 tag** 已推送；远端原有的一次 `Initial commit`（只有 `README.md`）用 `--allow-unrelated-histories` 合并进来（`fb0ecb0`）② `release.py` 归属改为 **goose 维护**：`AGENTS.md` 脚本表标注、`DEEPCODE.md`「工具版本库」节补「归属」段（DSH 只读、仍可调用）

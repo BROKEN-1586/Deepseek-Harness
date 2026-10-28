@@ -24,6 +24,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -40,6 +41,45 @@ GOOSE_FALLBACKS = [
 ]
 RECIPE_DIRS = [Path(r"D:\Clearn\.goose\recipes")]
 TIMEOUT_CAP = 1800.0
+MAX_TURNS_CAP = 40
+ALLOWED_WORKDIR = Path(r"D:\Clearn")
+AUDIT_LOG = Path(r"D:\Clearn\_diag\goose-audit.tsv")
+
+# ── 执行守卫（2026-10-28 用户定「安全第一」）──────────────────────────────
+# 这一层**归 DSH 维护**：约束不能交给被约束方，否则等于没有。
+# 拦的是 task 文本里的危险命令片段 —— 防手滑（rm -rf / 强推 / 改权限 / 删计划任务），
+# 不是防刻意绕过（真要绕过还能拼字符串），真正的硬边界在 Windows 账户权限与 git 分支保护。
+GUARD_RULES: list[tuple[str, str]] = [
+    ("递归删除",
+     r"(?i)\b(rm\s+-(?:rf|fr)\b|rmdir\s+/s\b|rd\s+/s\b|del\s+/[sfq]\b|remove-item\b[^\n]*-recurse|shutil\.rmtree\b)"),
+    ("磁盘 / 分区操作", r"(?i)\b(format\s+[a-z]:|diskpart|clean\s+all\b)"),
+    ("改写权限 / 所有权", r"(?i)\b(icacls|takeown|cacls)\b"),
+    ("删注册表 / 服务 / 计划任务", r"(?i)\b(reg\s+delete|sc\s+delete|schtasks\s+/delete|net\s+user\b[^\n]*/delete)"),
+    ("强制推送 / 丢弃本地改动", r"(?i)\bgit\s+push\b[^\n]*(--force|\s-f\b)|\bgit\s+reset\s+--hard\b|\bgit\s+clean\b[^\n]*-[a-z]*f"),
+    ("关机 / 重启", r"(?i)\b(shutdown|restart-computer|stop-computer)\b"),
+    ("碰系统目录", r"(?i)([a-z]:\\windows\\|%windir%|%systemroot%)"),
+]
+
+
+def _guard(task: str) -> str | None:
+    """命中一条就返回原因；不命中返回 None。"""
+    for label, pattern in GUARD_RULES:
+        m = re.search(pattern, task)
+        if m:
+            return f"{label}：命中 `{m.group(0).strip()}`"
+    return None
+
+
+def _audit(kind: str, task: str, detail: str) -> None:
+    """每次调用留一行痕迹：时间 / 类型 / task 摘要 / 结果。写不进就算了，不影响任务。"""
+    try:
+        AUDIT_LOG.parent.mkdir(parents=True, exist_ok=True)
+        stamp = time.strftime("%Y-%m-%d %H:%M:%S")
+        one = " ".join(task.split())[:120]
+        with open(AUDIT_LOG, "a", encoding="utf-8", newline="\n") as fh:
+            fh.write(f"{stamp}\t{kind}\t{one}\t{detail}\n")
+    except OSError:
+        pass
 
 app = MCPServer(
     name="goose",
@@ -76,9 +116,21 @@ def _goose_run_sync(
     max_turns: int,
     timeout_sec: float,
 ) -> str:
+    hit = _guard(task)
+    if hit:
+        _audit("BLOCKED", task, hit)
+        return ("[goose] 已拦截（安全约束）：" + hit +
+                "。\n这类动作不该交给无人值守的 goose —— 需要时在 DSH 里带审批做，或由用户手动执行。")
+
     cwd = Path(workdir).expanduser() if workdir else Path(DEFAULT_CWD)
     if not cwd.is_dir():
+        _audit("BAD_WORKDIR", task, str(cwd))
         return f"[goose] workdir 不存在：{cwd}"
+    try:
+        cwd.resolve().relative_to(ALLOWED_WORKDIR)
+    except ValueError:
+        _audit("BLOCKED", task, f"workdir={cwd}")
+        return f"[goose] 已拦截（安全约束）：workdir 只允许 {ALLOWED_WORKDIR} 之下，收到 {cwd}"
 
     cmd = [_goose_bin(), "run", "-q", "--no-session", "--output-format", "json",
            "--max-turns", str(int(max_turns))]
@@ -100,8 +152,10 @@ def _goose_run_sync(
             timeout=timeout_sec,
         )
     except subprocess.TimeoutExpired:
+        _audit("TIMEOUT", task, f"{timeout_sec:.0f}s")
         return f"[goose] 超时：{timeout_sec:.0f}s 内没跑完（任务可能太大，缩小范围或加大 timeout_sec）"
     except OSError as exc:
+        _audit("SPAWN_FAIL", task, str(exc)[:200])
         return f"[goose] 启动失败：{exc}"
 
     elapsed = time.time() - started
@@ -141,6 +195,7 @@ def _goose_run_sync(
     ]
     if err:
         footer.append(f"stderr尾={err[-300:]!r}")
+    _audit("RUN", task, f"rc={proc.returncode} {elapsed:.1f}s")
     return f"{body}\n\n—— goose · {' · '.join(footer)}"
 
 
@@ -162,6 +217,7 @@ async def run(
         timeout_sec: Hard wall-clock limit, capped at 1800.
     """
     timeout_sec = max(30.0, min(float(timeout_sec), TIMEOUT_CAP))
+    max_turns = max(1, min(int(max_turns), MAX_TURNS_CAP))
     return await anyio.to_thread.run_sync(
         lambda: _goose_run_sync(task, recipe, workdir, max_turns, timeout_sec)
     )
