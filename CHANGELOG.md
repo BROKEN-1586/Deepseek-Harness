@@ -4,6 +4,14 @@
 > **版本号真身**：`D:\Clearn\VERSION`（单行，机器读）—— 本文件是**给人读的历史**，最新在最上面。
 > 每条必带四样：**改了什么 / 涉及文件 / 验证 / 备份**。没验证的改动标 `⚠️ 未验证` 且**不占版本号**。
 
+## Alpha 0.6.4 · 2026-10-28 · 借 DeepInfer 两条：规则攒批改 ＋ 起草-校验
+
+- **改了什么**：① `DEEPCODE.md` 新增「🧠 从 DeepInfer 借的两条」节 —— ①**规则文件攒批改**（对应前缀缓存/槽位复用：规则文件每改一次会话前缀就失效，同任务内改 ≥2 次就先攒着）②**起草-校验**（对应投机解码 draft→verify：复杂改动 = workhorse 起草 → oldfox 按 blocker / concern / suggestion 审；触发条件＝改脚本 >50 行 / 动规则口径 / 涉权限安全 / 已改一轮仍不确定）③ 记下另外三条暂缓项（有界回放 / 结构化输出校验 / 异步调度）④ §C 路由表加一行指针
+- **背景**：本机 `C:\Users\36578\DeepInfer`（285 个 C++/CUDA 文件）与 `mini-deepinfer-main`（52 个 py）都是推理引擎，Windows + 5060 跑不了；只能借设计思想
+- **涉及文件**：`DEEPCODE.md`、`AGENTS.md`、`CHANGELOG.md`、`VERSION`、`VERSION.dsh`
+- **验证**：新节出现 1 次、§C 指针 1 次；三个文件 `LF == CRLF`；`VERSION` 与 `VERSION.dsh` 同号 0.6.4，`VERSION.goose` 仍 `stable 1.0.0`
+- **备份**：`D:\Clearn\_backup\deepinfer-20261028-202547\`
+
 ## Alpha 0.6.3 · 2026-10-28 · office2pdf 双引擎 ＋ 识破 WPS 接管 ＋ T46
 
 - **改了什么**：① `tools\office2pdf.py` 加 `--engine wps|ms`（wps=WPS 默认，ms=Office 2021）② 加**实际服务检测**：读注册表 `LocalServer32`，发现 `--engine ms` 实际仍指向 `wps.exe` 时打印警告 ③ 修 GBK 控制台下 `⚠` 字符崩溃（改为 `[!]` ＋ `stdout.reconfigure(utf-8)`，T17 同族）④ `DEEPCODE.md` Office 节补引擎行与「Office 2021 的 COM 被 WPS 接管」说明 ⑤ `问题汇总` 新增 **T46**

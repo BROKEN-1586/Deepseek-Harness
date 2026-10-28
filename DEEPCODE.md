@@ -112,6 +112,7 @@
 | 上网查资料 | 环境限制 · 🔴 联网优先：DeepSeek 直连 → Tavily 兜底 |
 | **遇到坑 / 查「这问题以前怎么解的」** | 📋 **问题汇总**：`D:\Clearn\问题汇总\问题汇总.md`（问题 → 措施 → 来源，分 5 区） |
 | **判断这活该给 goose 还是 DSH** | `AGENTS.md` §🚪 入口分工 → 「🔀 路由判定」（五条判据；成熟即交 goose，未定型留 DSH） |
+| **复杂改动（改脚本 > 50 行 / 动规则 / 涉安全）** | 🧠 `DEEPCODE.md`「从 DeepInfer 借的两条」→ 先 workhorse 起草、再 oldfox 审 |
 | 不熟的固定流程 | 🍳 固定流程的入口：Goose recipes |
 | 新建库 / 挪库目录 | 项目背景（三个脚本里是**硬编码路径**，要 grep 同步改） |
 
@@ -291,6 +292,25 @@ python D:\Clearn\tools\release.py verify <工具> <通道>-<版本>
 - **bypass 为空 = 谁都不例外**：管理员、你本人、goose 都一样；这两条不靠自觉，是 GitHub 服务端执行。
 - 于是分层变成：**文本守卫（拦截手滑）→ 服务端规则（拦截一切强推/删分支）→ Windows 账户权限（限制能写哪）**。前两层已就位，第三层按需再说。
 - 核验方式（只读，要 GCM 凭据）：`GET /repos/<owner>/<repo>/rules/branches/main` 与 `GET /repos/<owner>/<repo>/rulesets/<id>`，看 `rules` / `bypass_actors` / `enforcement`。
+
+### 🧠 从 DeepInfer 借的两条（2026-10-28）
+
+背景：本机有 `C:\Users\36578\DeepInfer`（生产推理引擎，Linux ＋ SM100/昇腾，**跑不了**）与 `C:\Users\36578\mini-deepinfer-main`（教学版）。引擎本身用不上，能借的是**设计思想**。
+
+**① 规则文件攒批改（对应前缀缓存 / 槽位复用）**
+
+- 原理：模型侧按**前缀**缓存，前缀一变后面全量重算。我们的 system prompt 挂着 `AGENTS.md`，**规则文件每改一次，会话前缀就失效一次**（重算 + 所有读者重读）。
+- 规矩：**一次任务里规则文件只改一批** —— `AGENTS.md` / `DEEPCODE.md` / `VERSION` / `CHANGELOG.md` 攒到一起改完再继续干活，别边干边逐条微调。
+- 判据：同一次任务里已改过规则文件 ≥ 2 次 → 第三次起先攒着，等这一轮收尾再一起落盘。
+
+**② 起草-校验（对应投机解码 draft → verify）**
+
+- 原理：小模型快速出候选，强模型只做验证 —— 验证比重新生成便宜。
+- 做法：**复杂改动 = workhorse 起草 → oldfox 审**，不自己反复改一版又一版。
+- 触发条件（任一）：改脚本 > 50 行 / 动规则口径 / 涉及权限与安全 / 自己已经改过一轮仍不确定。
+- 输出口径：oldfox 给 **blocker / concern / suggestion** 三级；blocker 必须改，concern 逐条回应，suggestion 可记待办。
+
+**另外三条（记着，暂缓）**：有界回放（长会话压缩成「最近 N 轮 ＋ 摘要」，别堆历史）、结构化输出校验（解析 goose / MCP 的 JSON 前先验 schema）、异步调度（长任务后台化，别前台死等）。
 
 ### 📄 Office 渲染链路（WPS COM，2026-10-28 建）
 
