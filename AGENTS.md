@@ -2,7 +2,7 @@
 
 > ⚠️ **本文件是「入口」，不是「真身」。**
 > **真身**：`D:\Clearn\DEEPCODE.md`（一直在维护，**不要在这里重复规则内容**）。
-> 🦢 当前运行框架 = **Goose**（2026-10-08 确认）。　🏷️ **当前版本：Alpha 0.4.0** —— 真身 `D:\Clearn\VERSION`（单行）＋ 历史 `CHANGELOG.md`。**每次有效改动都要升号**（用户 2026-10-28 定，规则见 `DEEPCODE.md`「🏷️ 版本号规则」；一个任务一只号、没验证不升、汇报第一行报版本）
+> 🦢 当前运行框架 = **Goose**（2026-10-08 确认）。　🏷️ **当前版本：Alpha 0.4.1** —— 真身 `D:\Clearn\VERSION`（单行）＋ 历史 `CHANGELOG.md`。**每次有效改动都要升号**（用户 2026-10-28 定，规则见 `DEEPCODE.md`「🏷️ 版本号规则」；一个任务一只号、没验证不升、汇报第一行报版本）
 
 ## 🔴 第一步（每次会话都做，别跳）
 
@@ -104,7 +104,7 @@
 | `D:\Clearn\tools\goose_mcp.py` | **把 goose 包成 MCP server**（2026-10-28 建）：暴露 `run` / `recipes` / `info` 三个工具，底层 `goose run -q --no-session --output-format json`；供 DSH 等外部入口调用 |
 | `D:\Clearn\tools\dsh_mcp_preflight.py` | **DSH 侧 MCP 只读验收探针**（2026-10-28 建）：读 `cordis.patch.yml` 的 `insert:` 块，用最坏环境（无 `APPDATA` / `cwd=C:\Windows` / PATH 只剩 system32）真握手 `initialize → tools/list → tools/call`；DSH 升级后重跑即可 |
 | `D:\Clearn\tools\daily_0730.bat` | **每天 07:30 的零 token 体检**（2026-10-28 建）：计划任务 `ClearnDailyGate` 调用，顺序跑 `daily_gate.py` ＋ `followup.py`，日志追加 `_diag\daily-0730.log`；已内置 `chcp 65001` ＋ `PYTHONIOENCODING=utf-8` |
-| `D:\Clearn\tools\release.py` | **工具版本库**（2026-10-28 建）：把 `tools\` 下的脚本按**四通道**（alpha 开发中 / beta 优化中 / stable 稳定 / ultra 最终版）发布成 `releases\<工具>\<通道>-<版本>\` 快照 ＋ git commit ＋ tag；`publish` / `baseline` / `list` / `verify`，默认预演，`--apply` 才写 |
+| `D:\Clearn\tools\release.py` | **工具版本库**（2026-10-28 建）：把 `tools\` 下的脚本按**四通道**（alpha 开发中 / beta 优化中 / stable 稳定 / ultra 最终版）发布成 `releases\<工具>\<通道>-<版本>\` 快照 ＋ git commit ＋ tag；`publish` / `baseline` / `list` / `verify`，默认预演，`--apply` 才写。**归 goose 维护**（2026-10-28 用户定；DSH 只读，改动走 goose） |
 | `.git`（仓库根 `D:\Clearn`） | **版本留痕**（2026-10-28 建）：只入库规则 / 脚本 / 版本记录，`_diag`、`_backup*`、`_work`、`tools\_retired` 忽略；`.gitattributes` 写 `* -text` 保字节原样（仓库混有 CRLF 规则与 LF 脚本两种行尾） |
 
 > 以上脚本全是用户自己写的，不是框架自带。API key 已从 DeepCode 配置挪到 `D:\AgentData\keys.json`（4 处硬编码早已改完）。

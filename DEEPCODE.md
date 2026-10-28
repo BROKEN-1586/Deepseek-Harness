@@ -249,6 +249,8 @@ python D:\Clearn\tools\release.py verify <工具> <通道>-<版本>
 
 **硬规则**：① 通道只能前进、版本号只能变大、目标目录不能已存在（三条都在写盘前校验，不过就一条都不写）；② 每次发布后跑一次 `verify` 核 sha256；③ `releases\` 是只读快照 —— **改代码只改 `tools\`**，快照不参与运行、不被其它脚本 import。
 
+**归属**：`release.py` 自身同样走四通道（首个版本 `release/alpha-0.1.0`），但**由 goose 维护**（2026-10-28 用户定）——DSH 对 `tools\*.py` 只读，要改这个脚本走 goose；DSH 仍可**调用**它（`publish` / `list` / `verify` 都是只读或走 goose 已建好的体例）。
+
 ## 🍳 固定流程的入口：Goose recipes（2026-10-08 新增）
 
 **8 个固定流程已落成 recipes**，文件在 `D:\Clearn\.goose\recipes\`（项目级；工作目录须为 `D:\Clearn` 才会被发现）：

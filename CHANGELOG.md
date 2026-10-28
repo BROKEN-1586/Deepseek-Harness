@@ -4,6 +4,13 @@
 > **版本号真身**：`D:\Clearn\VERSION`（单行，机器读）—— 本文件是**给人读的历史**，最新在最上面。
 > 每条必带四样：**改了什么 / 涉及文件 / 验证 / 备份**。没验证的改动标 `⚠️ 未验证` 且**不占版本号**。
 
+## Alpha 0.4.1 · 2026-10-28 · 仓库接 GitHub ＋ release.py 归 goose
+
+- **改了什么**：① `git remote add origin https://github.com/BROKEN-1586/Deepseek-Harness.git`，`main` 与 **24 个版本 tag** 已推送；远端原有的一次 `Initial commit`（只有 `README.md`）用 `--allow-unrelated-histories` 合并进来（`fb0ecb0`）② `release.py` 归属改为 **goose 维护**：`AGENTS.md` 脚本表标注、`DEEPCODE.md`「工具版本库」节补「归属」段（DSH 只读、仍可调用）
+- **涉及文件**：`DEEPCODE.md`、`AGENTS.md`、`CHANGELOG.md`、`VERSION`、`.git/config`（remote）
+- **验证**：`git push` 成功（`4396f53..fb0ecb0 main -> main`）、24 个 tag 显示 `[new tag]`；`git status -sb` 显示 `main...origin/main` 已跟踪；两次文件改动 `LF == CRLF`
+- **备份**：`D:\Clearn\_backup\goose-own-20261028-192549\`
+
 ## Alpha 0.4.0 · 2026-10-28 · 工具版本库：四通道快照 ＋ git tag
 
 - **改了什么**：新建 `tools\release.py`（`publish` / `baseline` / `list` / `verify`，默认预演）；把 `tools\` 下 **24 个脚本**按 `alpha-0.1.0` 打成基线，落 `releases\<工具>\alpha-0.1.0\`（脚本副本 ＋ `MANIFEST.json` ＋ `改了什么.md`）＋ 总表 `releases\00-索引\00-索引.md`；一次 commit ＋ 24 个 tag（`<工具>/v0.1.0`）。`DEEPCODE.md`「🏷️ 版本号规则」下新增「🧰 工具版本库（四通道）」小节，`AGENTS.md` 脚本表加一行
