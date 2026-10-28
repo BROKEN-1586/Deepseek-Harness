@@ -1,0 +1,19 @@
+{
+  "tool": "merge_and_sync",
+  "channel": "stable",
+  "channel_label": "稳定",
+  "version": "1.0.0",
+  "released_at": "2026-10-28 19:55:57",
+  "source": [
+    "D:\\Clearn\\tools\\merge_and_sync.py"
+  ],
+  "files": [
+    {
+      "name": "merge_and_sync.py",
+      "size": 12474,
+      "sha256": "f7c5b9bde456f05bca27a440cb38136503d061d7e4e0f5ddd575b6e1e13e98cf"
+    }
+  ],
+  "git_head_before": "78b1162f0489a8757b369e5f0e03d50b208bceb1",
+  "python": "3.14.6"
+}
