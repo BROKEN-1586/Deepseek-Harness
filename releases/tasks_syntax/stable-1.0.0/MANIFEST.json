@@ -1,0 +1,19 @@
+{
+  "tool": "tasks_syntax",
+  "channel": "stable",
+  "channel_label": "稳定",
+  "version": "1.0.0",
+  "released_at": "2026-10-28 19:56:00",
+  "source": [
+    "D:\\Clearn\\tools\\tasks_syntax.py"
+  ],
+  "files": [
+    {
+      "name": "tasks_syntax.py",
+      "size": 5304,
+      "sha256": "8fb210eea7d1d679e20e53567ea2d68bae911aa4dfb4445fe9010faa9848c8c0"
+    }
+  ],
+  "git_head_before": "c7a082cfc2db8b889c4f2f975569e52ffa2972dc",
+  "python": "3.14.6"
+}
