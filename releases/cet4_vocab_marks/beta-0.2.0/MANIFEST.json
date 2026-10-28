@@ -1,0 +1,19 @@
+{
+  "tool": "cet4_vocab_marks",
+  "channel": "beta",
+  "channel_label": "基础功能完整、优化中",
+  "version": "0.2.0",
+  "released_at": "2026-10-28 19:56:17",
+  "source": [
+    "D:\\Clearn\\tools\\cet4_vocab_marks.py"
+  ],
+  "files": [
+    {
+      "name": "cet4_vocab_marks.py",
+      "size": 5296,
+      "sha256": "61bb4c88bc298ec3dc5b353a16d75f55e8992a72a8fbaede70ca787a8a617791"
+    }
+  ],
+  "git_head_before": "f6b823098cef3278cda67a34552d86c58f51d7a3",
+  "python": "3.14.6"
+}
