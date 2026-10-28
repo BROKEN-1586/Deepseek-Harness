@@ -1,0 +1,52 @@
+version: "1.0.0"
+title: "教材 → Obsidian 笔记流水线"
+description: "从教材/PDF/PPT 产出或补充 Obsidian 笔记，守笔记风格与硬性约束，收尾挂索引并自动重建 RAG 索引。"
+parameters:
+  - key: source
+    input_type: string
+    requirement: required
+    description: "教材/PDF/PPT 的绝对路径"
+  - key: kb
+    input_type: select
+    requirement: required
+    description: "目标知识库"
+    options:
+      - math-rag
+      - sec-rag
+      - game-rag
+      - note-rag
+      - ai-rag
+      - csapp-rag
+      - novel-rag
+activities:
+  - "message: 读指定教材页 → 按笔记风格写/补笔记 → 挂索引 → **自动重建 RAG 索引**。"
+  - "读这个 PDF 并补进笔记"
+  - "只重建目标库的索引"
+instructions: |
+  固定流程②：教材 → 笔记 → 索引。来源：`{{ source }}`，目标库：`{{ kb }}`。
+
+  规则一律以 `D:\Clearn\DEEPCODE.md` 为准，**不凭记忆写**：
+  - 「📝 笔记风格」一节（标题带 `🍳 recipe: note-pipeline` 标记）：总原则、词汇必带音标、frontmatter、正文结构、公式、callout、双链、目录与命名、**第 7 节「新增笔记后的收尾动作」**
+  - 「📚 各科教材来源与读取方式」一节：扫描版判据、CSAPP 页码换算、**工科数学分析两套教材页码不同**、答案册分布
+  - 「笔记改动后必须重建 RAG 索引」一节（标题带 `🍳 recipe: rag-rebuild` 标记）
+
+  步骤：
+  1. 先判素材类型，再选读法：
+     - 文本版 PDF → `read_pdf`；
+     - 扫描版 PDF → `pdf_to_images` + `analyze_image`；
+     - **截图 / 投屏图（十几张以上）→ `analyze_image` 分批并行**（抽取式 prompt：「只写标题/要点/公式/矩阵/结论」），或整批 `delegate` 给子代理（图不进主会话）。
+       🔴 **别用 `read_image` 逐张读**——图读进上下文后整段会话不释放，之后每个动作都要重过一遍，越读越慢（2026-10-11 教训；详见 DEEPCODE「⚠️ 工具坑：批量读截图」）。
+     - 🔴 **C 语言例外（用户 2026-10-14 定）：不读教材，一律以课件为准**——教材是扫描版、无文本层，OCR 成本高且页码/措辞都不可靠；课件有文本层且是老师实讲版本。**不要 OCR 教材**；确需查教材时**先问用户**。
+  2. 写/补笔记前先读目标笔记现状，**只补知识性内容**。
+  3. 硬性约束（用户定过「不写」的口径）：不写作业题号 / 学时分配 / 教学安排 / 老师姓名；
+     **新建 `.md` 前必须先通知用户**（用户 2026-10-14 定，取代原「只补充现有笔记，不新建 .md」）——写清「建哪篇 / 为什么 / 放哪 / 照哪篇体例」，确认后再建；分段函数 / `sgn x` / `[x]` 这类**带空心端点的图不画**，靠文字说明。
+  4. **大于 100 行的文件不要整篇 Write**，用 `safe_edit` / `safe_append` 分处改，改完读回行数。
+  5. 收尾必做：挂索引（note-rag 挂 `笔记总览.md` 对应章节表；高数库挂 `高数库-模块-*.md`）。
+
+  重建索引（**写完就建，不必问用户**，用户 2026-10-07 定）：
+  ```powershell
+  D:\rag\rebuild-one.bat {{ kb }}
+  ```
+  ⚠️ **不要用 MCP 的 rebuild_index 工具**（必超时，见 `rag-rebuild` recipe）。
+  验收：末行 `[{{ kb }}] 完成，共 N 段。`，再用 `search_knowledge` 做**检索探针**验证并汇报。
+  收尾：按第五条铁律往 `D:\AgentData\memory\lessons-recent.md` 顶部追加一条备案。

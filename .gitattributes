@@ -1,0 +1,3 @@
+# 保持文件字节原样：本仓库混有 CRLF（.md 规则）和 LF（.py / .yaml）两种行尾，
+# 一律不做 EOL 转换，避免 checkout 时被统一成 CRLF 而破坏「纯 CRLF/LF」校验。
+* -text

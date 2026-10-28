@@ -1,0 +1,28 @@
+version: "1.0.0"
+title: "学习周报"
+description: '跑 weekly_review.py 生成本周学习报告（写 D:\AutoPrep\weekly_review.md）。**不推滴答**（用户 2026-10-09 定：滴答不再自动塞任务）。'
+parameters:
+  - key: days
+    input_type: number
+    requirement: optional
+    default: "7"
+    description: "回顾天数，默认 7"
+activities:
+  - "跑本周学习周报（只生成报告，不推滴答）"
+  - "只生成报告不推送"
+instructions: |
+  固定流程③：学习周报（回顾 {{ days }} 天）。
+
+  脚本：`D:\AutoPrep\weekly_review.py`（读 `D:\AutoPrep\study_history.jsonl` + `study_goals.json` + 日记 `05-流水日记`）。
+
+  步骤：
+  1. 直接跑：`python D:\AutoPrep\weekly_review.py`（用 shell，不要用 `!` 前缀）。
+  2. 产物：`D:\AutoPrep\weekly_review.md`——**必须读回文件**确认六节齐全（不是只看脚本报告成功）。
+  3. **滴答推送：不再用**（用户 2026-10-09 定——不要自动塞任务）。⚠️ 但脚本 `weekly_review.py` 里**仍带**推送逻辑；关掉它属脚本改动，**未获批准前先不动**。跑完若滴答里多出 `【周复盘】`，那是脚本行为，**不代表规则改了**。
+  4. 若有异常，先看两类历史坑：
+     - 日记读不到 → `JOURNAL_DIR` 必须是 `\05-流水日记`，文件名兼容 `MM-DD.md` 与 `YYYY-MM-DD.md`。
+     - 科目被拆成多行 → 科目别名未归一（`程序设计/程序设计基础`、`博弈/博弈思维` 等要映射到 `study_goals.json` 的正式名）。
+  5. 汇报时贴：完成度百分比、各科行、日记读到几篇。
+
+  ⚠️ 改这个脚本属「第四条铁律」范围：**先备份 + 先审批**，改完重跑验证。
+  收尾：按第五条铁律往 `D:\AgentData\memory\lessons-recent.md` 顶部追加一条备案。

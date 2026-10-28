@@ -1,0 +1,38 @@
+version: "1.0.0"
+title: "RAG 库索引重建"
+description: "重建指定 Obsidian RAG 知识库的向量索引，以『完成，共 N 段』末行做硬校验。绕开必超时的 MCP rebuild_index 工具。"
+parameters:
+  - key: kb
+    input_type: select
+    requirement: required
+    description: "要重建的知识库"
+    options:
+      - math-rag
+      - sec-rag
+      - game-rag
+      - note-rag
+      - ai-rag
+      - csapp-rag
+      - novel-rag
+activities:
+  - "message: 选择要重建的知识库，会跑 `D:\\rag\\rebuild-one.bat` 并以『完成，共 N 段』做硬校验。"
+  - "重建 csapp-rag 索引（基线 38 段）"
+  - "重建 note-rag 索引"
+instructions: |
+  执行本项目固定流程：重建 RAG 库 {{ kb }} 的向量索引。
+
+  铁律（不许违）：
+  1. 首选只用 shell 跑命令行（本 recipe 的硬验收就在命令行输出里）。
+     说明：MCP 的 `rebuild_index` 工具已于 2026-10-08 改成**后台 detach**——调用会立即返回日志路径
+     （`D:\rag\logs\build-<kb>-<时间戳>.log`，UTF-8），**不再阻塞、不再假超时**；
+     若用了它，必须读该日志末行判定（`Get-Content <路径> -Tail 20 -Encoding UTF8`），
+     **绝不能用「调用有没有超时」判断成败**。
+  2. 命令（PowerShell）：`D:\rag\rebuild-one.bat {{ kb }}`
+     等价写法：`cd D:\rag; python rag_server.py --build {{ kb }} --force`
+     若脚本尾部 pause 卡住，改用：`cmd /c "D:\rag\rebuild-one.bat {{ kb }} < nul"`
+  3. 跑到底，中途不许放弃（可能数分钟）。
+  4. 判定（缺一不算通过）：末行出现 `[{{ kb }}] 完成，共 N 段。`；
+     csapp-rag 基线 = 38 段，数目不符必须解释原因；出现
+     「命令语法不正确 / The syntax of the command is incorrect / 非 0 退出码」= 失败。
+  5. 必须贴原始输出末 20 行，不许只报「成功」。
+  6. 收尾按第五条铁律，往 D:\AgentData\memory\lessons-recent.md 顶部追加一条备案。

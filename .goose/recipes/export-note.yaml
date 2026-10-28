@@ -1,0 +1,77 @@
+version: "1.0.0"
+title: "导出笔记（PDF / Word）"
+description: "数学笔记一律走 md2pdf.py（真 LaTeX，禁 export_pdf）；非数学或要 Word 走 export_docx。含 MathJax autoload、公式占位符、图片百分号编码三个坑，导完必须回读自检（裸 $ = 公式没渲染）。"
+parameters:
+  - key: src
+    input_type: string
+    requirement: required
+    description: "源 Markdown 绝对路径"
+  - key: out
+    input_type: string
+    requirement: optional
+    default: ""
+    description: "输出路径；留空＝与源同名同目录"
+  - key: format
+    input_type: select
+    requirement: optional
+    default: "pdf"
+    description: "导出格式"
+    options:
+      - pdf
+      - docx
+  - key: layout
+    input_type: select
+    requirement: optional
+    default: "默认（A4 纵向）"
+    description: "版式；打印用的英语那批才选 landscape+indent"
+    options:
+      - 默认（A4 纵向）
+      - landscape+indent（段首两格、横向）
+prompt: "把 {{ src }} 导出成 {{ format }}，按版式 {{ layout }}，导完回读自检。"
+activities:
+  - "把这篇笔记导成 PDF"
+  - "导成 Word 发给老师"
+  - "这批要打印，横版段首缩进"
+instructions: |
+  固定流程：导出 {{ src }} → {{ format }}，版式 = {{ layout }}，输出 = {{ out }}（留空则与源同名同目录）。
+
+  ## 选路（选错就坏稿）
+  | 内容 | 用什么 |
+  |---|---|
+  | **任何含公式 / 矩阵 / 音标的数学笔记** | `python D:\Clearn\tools\md2pdf.py`（**真 LaTeX 渲染**） |
+  | 非数学笔记、要 PDF | `obsidian-rag__export_pdf` |
+  | 要 Word（`.docx`，无论科目） | `obsidian-rag__export_docx` |
+
+  🔴 **数学笔记禁 `export_pdf`**（T7）：它走 `_simplify_latex()`，`\begin{vmatrix}`、`\frac`、矩阵/分式被拆坏，音标变方框。
+
+  ## md2pdf 用法（python = `C:\Users\36578\AppData\Local\Programs\Python\Python314\python.exe`）
+  ```
+  python D:\Clearn\tools\md2pdf.py <src.md> <out.pdf> [标题] [--landscape] [--indent]
+  python D:\Clearn\tools\md2pdf.py --batch <清单.txt>   :: 每行: 源.md|输出.pdf|标题|选项
+  python D:\Clearn\tools\md2pdf.py --dir <源文件夹> <输出文件夹>
+  python D:\Clearn\tools\md2pdf.py --merge <out.pdf> <src1.md> <src2.md> ...
+  ```
+  - 版式默认 A4 纵向、段首不缩进；`{{ layout }}` 选 landscape+indent 时加 `--landscape --indent`。
+  - 插图按「md 同目录 → 同层 `99-附件` → 上一层 `99-附件`」查找后 base64 内嵌；装不进 PDF 的图会点名。
+  - `md2pdf_math.py` 是**转发壳**，新脚本一律调 `md2pdf.py`。
+
+  ## export_docx / export_pdf 参数
+  `source_path`（必填）/ `output_path`（留空＝同源同目录）/ `title`。自动过滤 YAML frontmatter、callout 转中文标记（`[!info]`→【定义】）、`![[图]]` 自动嵌入。
+
+  ## 改 md2pdf 时的三个坑（T8，改之前必读）
+  1. `tex.packages: {'[-]': ['autoload']}` **必须关掉 autoload** —— 否则 `\xlongequal` 之类宏会去 CDN 拉包，离线请求悬挂，**整篇公式一个都不渲染**（症状：PDF 文本层全是裸 `$…$`）。
+  2. 公式要**先换占位符再走 Markdown**，否则 `\\` 被转义、`_ ^ *` 被当强调、公式里的 `|` 被当表格分隔。
+  3. markdown-it 会把图片 `src` 做**百分号编码**，查图前必须 `unquote`。
+  ⚠️ 改这个脚本属第四条铁律：**先备份、先问、改完重验**。
+
+  ## 导出后必做自检（不许交付"可能没渲染"的稿）
+  1. 回读产出文件（PDF 用 pymupdf 取文本）：**出现裸 `$` → 公式没渲染**，判失败，修完重导。
+  2. 缺图 / 图裂 → 点名是哪张，查附件目录。
+  3. 报文件体积；体积异常小（如数学笔记 < 50 KB）通常意味着公式全没进去。
+  4. 要打印时落点：`C:\Users\36578\Desktop\学习资料\`（英语四级 `01-词汇`…`05-真题`；顶层 `工科数学分析\`、`线性代数\`）。
+
+  ## 收尾
+  按第五条铁律写备案（含文件台账：源 → 产出）。
+
+  ## 末行硬校验
+  `✅ 导出完成｜源=<src>｜出=<out>｜格式=<pdf|docx>｜体积=<KB>｜自检=<裸$ 0 处 / 缺图 0 张>`

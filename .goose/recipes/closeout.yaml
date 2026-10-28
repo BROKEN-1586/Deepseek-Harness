@@ -1,0 +1,67 @@
+version: "1.0.0"
+title: "收尾三件套（挂索引 → 重建一次 → 探针）"
+description: "笔记改动后的固定收尾：先挂索引，所有改动全部做完后最后只重建一次，再用检索探针验证（别只看「完成」字样），最后按第五条铁律写备案并报三件事。含 Ollama 硬前置、并发保护、空库风险。"
+parameters:
+  - key: kb
+    input_type: select
+    requirement: optional
+    default: "note-rag"
+    description: "要重建的库；拿不准就按笔记落在哪个库目录选（跨多库改动＝每库各建一次）"
+    options:
+      - math-rag
+      - sec-rag
+      - game-rag
+      - note-rag
+      - ai-rag
+      - csapp-rag
+      - novel-rag
+      - archive-rag
+  - key: probe
+    input_type: string
+    requirement: optional
+    default: ""
+    description: "探针关键词：填本次新写进笔记的词（留空则从改动内容里自己挑 3 个专有词）"
+prompt: "对 {{ kb }} 执行收尾三件套：挂索引 → 最后只重建一次 → 检索探针验证 → 备案汇报。"
+activities:
+  - "笔记改完了，走收尾"
+  - "重建 note-rag 并探针验证"
+  - "给我跑一遍收尾三件套"
+instructions: |
+  固定流程：{{ kb }} 的收尾。探针关键词 = {{ probe }}（留空则从本次改动里挑 3 个专有名词）。
+
+  ## 顺序不能变（P1，2026-10-11 同日踩过）
+  1. **挂索引**：按库挂到对应总览 / MOC（note-rag → `笔记总览.md`；高数 → `高数库-模块-*.md`；博弈论 → 该文件夹 `00-` 总览 ＋ `02-课件笔记` MOC「另见」＋ 相邻篇上下篇导航）。
+  2. **所有改动全部做完**（含 `00-` 总览的 frontmatter / 表格）——**建完索引又去改总览，只能整库再来一遍**。
+  3. **最后只重建一次**。
+  4. 探针验证 → 5. 写备案 → 6. 汇报。
+
+  ## 重建（命令与判据）
+  1. 🔴 **硬前置：Ollama 必须在跑**。自查 `ollama list` 能看到 `bge-m3:567m`；没有就先起：
+     `Start-Process -FilePath 'C:\Users\36578\AppData\Local\Programs\Ollama\ollama.exe' -ArgumentList 'serve' -WindowStyle Hidden`，等 ~8 秒再 `ollama list` 复核，**然后才重建**。
+     原因（2026-10-08 踩坑）：`build_index()` 是**先 `delete_collection()` 再嵌入**，Ollama 没起就抛 `ConnectionError`，**旧索引已删、新索引没写 → 该库当场变空库**。
+  2. 8GB 显存：重建前 `ollama stop qwen3:8b` 腾显存；**别指望** `OLLAMA_NUM_GPU=0`（穿透不到服务进程，T12）。
+  3. 命令（cmd / PowerShell 均可，整行复制）：
+     `cd /d D:\rag && set PYTHONIOENCODING=utf-8 && "C:\Users\36578\AppData\Local\Programs\Python\Python314\python.exe" rag_server.py --build {{ kb }} --force`
+     `--force` 不可省（集合非空会直接跳过）；`PYTHONIOENCODING=utf-8` 必带（GBK 控制台打进度条会崩，写入不受影响但看不到判据）。
+  4. **判成功**：末行 `[{{ kb }}] 完成，共 N 段。`，前面有 `读取 N 个文件` / `切分 N 段`。
+  5. ❌ 不用 MCP `rebuild_index`（T9）；若用了，**必须读日志末行判定**，绝不能用「调用有没有超时」判成败。
+  6. 不必停 RAG 服务、不必做增量（`--force` 就是全量重写）。
+  7. **超时 / 中断先查残留**：`Get-CimInstance Win32_Process -Filter "name='python.exe'" | Select-Object ProcessId,CommandLine | Format-List`
+     —— 多出 `rag_server.py --build …` 说明还在跑：**等它跑完，绝不并发重跑**（并发重建互相覆盖，索引损坏难恢复）。
+  8. db 目录名**不带 `-rag`**：`math-rag → D:\rag\db\math`、`note-rag → D:\rag\db\note` …（传 `db\math-rag` 不存在）。
+     若 `D:\rag\db\<简称>\chroma.sqlite3-journal` 还在，说明写事务未正常收尾。
+
+  ## 探针（唯一可信判据）
+  - 「进程结束」≠「写全了」。用**本次新写进笔记的关键词**调 `search_knowledge(kb="{{ kb }}", query=...)`。
+  - 正常：结果来自**多个不同目录/文件**。
+  - 半截特征：结果**全部集中在切分靠前的大文件**（如只在 `01-公式速查`）→ 判为不完整，等进程跑完再验。
+  - 相关度要报出来，别只说「命中了」。
+
+  ## 汇报（用户 2026-10-07 定：建完不说＝没做）
+  三项必写：**① 建了哪个库；② 读取 N 文件 / 切分 M 段；③ 探针是否命中 + 相关度**。
+
+  ## 收尾
+  按第五条铁律往 `D:\AgentData\memory\lessons-recent.md` **顶部**追加一条，**必带文件台账**（处理了哪些文件 → 生成了哪些笔记落在哪）。
+
+  ## 末行硬校验
+  `✅ 收尾完成｜库={{ kb }}｜文件=<N>｜段=<M>｜探针=<命中 x.x / 未命中>｜备案=<已写>`
