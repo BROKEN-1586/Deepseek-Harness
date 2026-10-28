@@ -1,0 +1,19 @@
+{
+  "tool": "stamp_backfill",
+  "channel": "stable",
+  "channel_label": "稳定",
+  "version": "1.0.0",
+  "released_at": "2026-10-28 19:56:01",
+  "source": [
+    "D:\\Clearn\\tools\\stamp_backfill.py"
+  ],
+  "files": [
+    {
+      "name": "stamp_backfill.py",
+      "size": 3572,
+      "sha256": "6ce7e549f0930726a3c86628b56ac86096d05262a8d50ea5fc154d2a71604846"
+    }
+  ],
+  "git_head_before": "29e3f11e11fdba25055523238a21f914a402e17c",
+  "python": "3.14.6"
+}
