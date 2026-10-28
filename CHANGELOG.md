@@ -4,6 +4,13 @@
 > **版本号真身**：`D:\Clearn\VERSION`（单行，机器读）—— 本文件是**给人读的历史**，最新在最上面。
 > 每条必带四样：**改了什么 / 涉及文件 / 验证 / 备份**。没验证的改动标 `⚠️ 未验证` 且**不占版本号**。
 
+## Alpha 0.6.1 · 2026-10-28 · 补 T44（推送被 RST 的分块推法）
+
+- **改了什么**：`问题汇总` 新增 **T44** —— GitHub 大包推送被传输层重置（`curl 55` / `sideband packet`）的判据与修法：`http.version=HTTP/1.1` ＋ **按段 fast-forward 推**（`HEAD~16` → `HEAD~8` → `HEAD`）＋ tag 单独推 ＋ 回读 `ls-remote` 核对；「更新记录」加一行
+- **涉及文件**：`问题汇总\问题汇总.md`、`CHANGELOG.md`、`VERSION`、`VERSION.dsh`、`AGENTS.md`
+- **验证**：插入后 T44 与更新记录各 1 次；四个文本文件 `LF == CRLF`；`VERSION` 与 `VERSION.dsh` 同号（0.6.1），`VERSION.goose` 保持 `stable 1.0.0` 不动
+- **备份**：`D:\Clearn\_backup\t44-20261028-200310\`
+
 ## Alpha 0.6.0 · 2026-10-28 · 三层版本体系 ＋ 24 个工具定版
 
 - **改了什么**：① 新增**入口级版本**：`VERSION.goose` = `stable 1.0.0`（goose 整体，用户定 Stable）、`VERSION.dsh` = `alpha 0.6.0`（DSH 侧仍是 Alpha）；资产层 `VERSION` 同步升 `alpha 0.6.0` ② `DEEPCODE.md`「🏷️ 版本号规则」下新增「🧭 三层版本」小节（入口层 ×2 ＋ 资产层 ＋ 工具级，含「工具级与入口级不联动」等 4 条规则）③ **24 个工具全部定版**：stable 13 个升 `1.0.0`、beta 7 个升 `0.2.0`、alpha 4 个升 `0.2.0`，每个都发成 `releases\<工具>\<通道>-<版本>\` 快照 ＋ 独立 commit ＋ tag
