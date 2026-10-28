@@ -1,0 +1,19 @@
+{
+  "tool": "hw_from_courseware",
+  "channel": "beta",
+  "channel_label": "基础功能完整、优化中",
+  "version": "0.2.0",
+  "released_at": "2026-10-28 19:56:20",
+  "source": [
+    "D:\\Clearn\\tools\\hw_from_courseware.py"
+  ],
+  "files": [
+    {
+      "name": "hw_from_courseware.py",
+      "size": 5857,
+      "sha256": "82dd6f200d8fa86986b9685a3d2432eb6ea5aece6132eb3d5294e555eaaf2aa2"
+    }
+  ],
+  "git_head_before": "89979bf61c178b47a66c939e1b650d9f77d3123c",
+  "python": "3.14.6"
+}
