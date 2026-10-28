@@ -1,0 +1,19 @@
+{
+  "tool": "md2pdf",
+  "channel": "stable",
+  "channel_label": "稳定",
+  "version": "1.0.0",
+  "released_at": "2026-10-28 19:56:05",
+  "source": [
+    "D:\\Clearn\\tools\\md2pdf.py"
+  ],
+  "files": [
+    {
+      "name": "md2pdf.py",
+      "size": 15481,
+      "sha256": "5f2cd15662936eb51d39960758cbba584e3e884cba1e67bc1924eaf0bc4e01b9"
+    }
+  ],
+  "git_head_before": "1583e98e3a0cae761566612d6f9440ee496c972a",
+  "python": "3.14.6"
+}
