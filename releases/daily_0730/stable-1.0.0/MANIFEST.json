@@ -1,0 +1,19 @@
+{
+  "tool": "daily_0730",
+  "channel": "stable",
+  "channel_label": "稳定",
+  "version": "1.0.0",
+  "released_at": "2026-10-28 19:55:58",
+  "source": [
+    "D:\\Clearn\\tools\\daily_0730.bat"
+  ],
+  "files": [
+    {
+      "name": "daily_0730.bat",
+      "size": 683,
+      "sha256": "304b363fe640219c594fcb23e943cfbad75949a11fd02e3ad3f586ce547980e2"
+    }
+  ],
+  "git_head_before": "a452e67a66e88aa213b98a6eda8410155d4524a8",
+  "python": "3.14.6"
+}
