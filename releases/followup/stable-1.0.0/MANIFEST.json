@@ -1,0 +1,25 @@
+{
+  "tool": "followup",
+  "channel": "stable",
+  "channel_label": "稳定",
+  "version": "1.0.0",
+  "released_at": "2026-10-28 19:55:56",
+  "source": [
+    "D:\\Clearn\\tools\\followup.py",
+    "D:\\Clearn\\tools\\followup.bat"
+  ],
+  "files": [
+    {
+      "name": "followup.py",
+      "size": 11026,
+      "sha256": "12884449cb02be8228b262dbc081962a75e7e747e9b8058345401298cf6a8e0f"
+    },
+    {
+      "name": "followup.bat",
+      "size": 173,
+      "sha256": "7ebed3161691f8424f54a742eb3dc7178d06a01b0eb8f3a0d6ea91c8229f0ff9"
+    }
+  ],
+  "git_head_before": "5cc079b8ab9520bb7431907a520822db73d19fa0",
+  "python": "3.14.6"
+}
