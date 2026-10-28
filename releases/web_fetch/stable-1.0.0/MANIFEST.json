@@ -1,0 +1,19 @@
+{
+  "tool": "web_fetch",
+  "channel": "stable",
+  "channel_label": "稳定",
+  "version": "1.0.0",
+  "released_at": "2026-10-28 19:56:10",
+  "source": [
+    "D:\\Clearn\\tools\\web_fetch.py"
+  ],
+  "files": [
+    {
+      "name": "web_fetch.py",
+      "size": 6279,
+      "sha256": "da893b4695abd48ad30bf2ea7e0a8279eb37545403b2aec8ea35b247406172d4"
+    }
+  ],
+  "git_head_before": "5be8f9f305d5fc6f54bb731be34710463566dd14",
+  "python": "3.14.6"
+}
