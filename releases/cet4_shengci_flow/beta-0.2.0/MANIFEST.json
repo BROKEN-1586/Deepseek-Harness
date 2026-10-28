@@ -1,0 +1,19 @@
+{
+  "tool": "cet4_shengci_flow",
+  "channel": "beta",
+  "channel_label": "基础功能完整、优化中",
+  "version": "0.2.0",
+  "released_at": "2026-10-28 19:56:15",
+  "source": [
+    "D:\\Clearn\\tools\\cet4_shengci_flow.py"
+  ],
+  "files": [
+    {
+      "name": "cet4_shengci_flow.py",
+      "size": 4153,
+      "sha256": "63ab0c344c1259f046624b8535a29f11570c569390dc009f46345091eeecbb14"
+    }
+  ],
+  "git_head_before": "5bbccc07b91aba62c0fcd4fd1e1ea8e694896f14",
+  "python": "3.14.6"
+}
