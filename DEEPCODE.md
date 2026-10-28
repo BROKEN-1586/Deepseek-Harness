@@ -1135,7 +1135,7 @@ $$
 | `daily_gate.py` | 每日流程的**机器判据**：`VERDICT`（FULL / LITE）＋ 未勾数（今天 / 昨天）＋ 镜像是否一致 ＋ ≤3 天或逾期风险 | `python D:\Clearn\tools\daily_gate.py`（`--date YYYY-MM-DD` 可指定基准日） | 只写诊断文件 `_diag\daily-gate.txt` |
 | `followup.py` | **只读体检**七块：作业逾期 / ≤3 天、素材缺口、镜像一致性（内部跑 merge 预演）、四级三态词数、RAG 索引新鲜度、最新备份、时间基准 | `python D:\Clearn\tools\followup.py`（`--days N` 调阈值；或双击 `followup.bat`） | **纯只读**，只落 `_diag\followup.txt` |
 | `merge_and_sync.py` | 14 对文件的**勾选并集合并** ＋ 真身 → 镜像同步（6 作业池 ＋ 6 教务页 ＋ `00-任务总览` ＋ `00-作业总览`） | `python D:\Clearn\tools\merge_and_sync.py`（预演）／`… --apply`（真写，自带备份 ＋ 复制后复核；`--stamp` 可指定回写日期） | **默认预演**，`--apply` 才写 |
-| `syncflow.py` | **连锁改写**：生词三态流转、词汇标记汇总（满 100 拆篇）、剩余天数重算、已完成折叠、总览数字、镜像同步、索引新鲜度 | `python D:\Clearn\tools\syncflow.py`（预演）／`--apply`／`--rebuild-index`／`--fix-snapshots` | **默认预演**，写前整包进 `D:\backup\syncflow-<ts>\` |
+| `syncflow.py` | **连锁改写**：生词三态流转、词汇标记汇总（满 100 拆篇）、剩余天数重算（**作业池 ＋ 教务页都算**，2026-10-28 扩）、已完成折叠、总览数字、镜像同步、索引新鲜度 | `python D:\Clearn\tools\syncflow.py`（预演）／`--apply`／`--rebuild-index`／`--fix-snapshots` | **默认预演**，写前整包进 `D:\backup\syncflow-<ts>\` |
 | `hw_from_courseware.py` | 课件前 3 页找「作业 / 习题」行 → 候选条目（按内容判科目） | `python D:\Clearn\tools\hw_from_courseware.py`（`--date` / `--file` 指定来源）／`--apply` | **默认只打印候选** |
 | `tasks_syntax.py` | 给带截止的顶层任务行补 Tasks 插件到期日 `📅 YYYY-MM-DD` | `python D:\Clearn\tools\tasks_syntax.py` / `--apply` | **默认预演** |
 | `stamp_backfill.py` | 给历史 `- [x]` 补时间标记（`（时间未记录）` / `✅ 日期未记录`） | `python D:\Clearn\tools\stamp_backfill.py` / `--apply` | **默认预演** |
@@ -1268,6 +1268,7 @@ python D:\Clearn\tools\merge_and_sync.py --apply    ← 真写（先备份到 D:
 - 2026-10-19：作业清单改**四行式**；镜像同步成文；勾选时间只到天
 - 2026-10-27：**结构变更** —— 删 `D:\日程规划`，作业清单 ＋ 教务清单合成 `D:\任务清单`；**不再建日记 / 快照 / 周计划**
 - **2026-10-28：整节重写** —— 清掉全部日记页 / 快照 / 周计划 / `93-日程规划` 镜像路径；取材表改按 `D:\任务清单` 落点；补教务页「准备 / 赴考」写法、连顺阈值统一为 7 天、`merge_and_sync` 预演盲区（T36）
+- **2026-10-28（同日再修）**：`read-the-night` recipe 整份重写成本节口径（recipe **1.1.0**，标题改「读 流水日记 → 任务清单」）；`syncflow.py` ③ 扩到 **6 个教务页**、修「折叠静默删行」、把重算提成 `due_new()` 让已勾条目的 `- 截止：` 也重算；`daily_gate.py` 起 `_diag\flow-log.tsv` 事实源；余天数实测不一致 0 处
 
 ## 📤 三类材料的存放与分工：归类归我，保存同步归其他 Agent（用户 2026-10-09 定）
 
