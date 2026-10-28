@@ -1,0 +1,19 @@
+{
+  "tool": "office2pdf",
+  "channel": "alpha",
+  "channel_label": "开发中",
+  "version": "0.1.0",
+  "released_at": "2026-10-28 20:30:46",
+  "source": [
+    "D:\\Clearn\\tools\\office2pdf.py"
+  ],
+  "files": [
+    {
+      "name": "office2pdf.py",
+      "size": 8464,
+      "sha256": "91211ddc6739b3d45790b35bee18941baa359ade07bbcab02752383a23dd976b"
+    }
+  ],
+  "git_head_before": "465a885a7a10b0d0943adc73dfd0e80d0b4dca43",
+  "python": "3.14.6"
+}
