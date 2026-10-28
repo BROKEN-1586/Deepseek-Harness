@@ -1,0 +1,19 @@
+{
+  "tool": "ai_archive",
+  "channel": "beta",
+  "channel_label": "基础功能完整、优化中",
+  "version": "0.2.0",
+  "released_at": "2026-10-28 19:56:13",
+  "source": [
+    "D:\\Clearn\\tools\\ai_archive.py"
+  ],
+  "files": [
+    {
+      "name": "ai_archive.py",
+      "size": 15042,
+      "sha256": "40d73edbc6eeeab8640c9969dc1f5eede7ff0761c3a9be5c6686afe17f148798"
+    }
+  ],
+  "git_head_before": "1e1347154c501df1c01e195e42fa8606733bc6d3",
+  "python": "3.14.6"
+}
