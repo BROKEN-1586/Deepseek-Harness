@@ -1,0 +1,19 @@
+{
+  "tool": "reorg_desktop",
+  "channel": "beta",
+  "channel_label": "基础功能完整、优化中",
+  "version": "0.2.0",
+  "released_at": "2026-10-28 19:56:14",
+  "source": [
+    "D:\\Clearn\\tools\\reorg_desktop.py"
+  ],
+  "files": [
+    {
+      "name": "reorg_desktop.py",
+      "size": 21733,
+      "sha256": "7564cf853f6ebe6e2fef2c72fda4630f524d763833e7d41b5d295c4b7b9299a1"
+    }
+  ],
+  "git_head_before": "71ba7772d9bb2015e9f01837f347d29eaf5efcfa",
+  "python": "3.14.6"
+}
