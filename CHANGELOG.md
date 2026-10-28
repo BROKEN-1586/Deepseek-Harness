@@ -4,6 +4,13 @@
 > **版本号真身**：`D:\Clearn\VERSION`（单行，机器读）—— 本文件是**给人读的历史**，最新在最上面。
 > 每条必带四样：**改了什么 / 涉及文件 / 验证 / 备份**。没验证的改动标 `⚠️ 未验证` 且**不占版本号**。
 
+## Alpha 0.5.3 · 2026-10-28 · GitHub 服务端规则集补 tags ＋ 写进守卫节
+
+- **改了什么**：① 用 API 新建 tag 规则集（id 26036900：`refs/tags/*`、`deletion` ＋ `non_fast_forward`、bypass 空、active），补上原来只有 `main` 受保护的缺口 —— 24 个 `<工具>/v*` tag 从此不会被删或被强改 ② `DEEPCODE.md`「🛡️ goose 执行守卫」节加「服务端硬边界」表：两条规则集的目标 / 作用 / 状态，并把原来「GitHub 分支保护（要单独配）」改成「已配」，明确分层＝文本守卫 → 服务端规则 → 账户权限
+- **涉及文件**：`DEEPCODE.md`、`AGENTS.md`、`CHANGELOG.md`、`VERSION`（GitHub 侧：repo rulesets 26035817 / 26036900）
+- **验证**：`GET /rules/branches/main` 返回 `deletion` ＋ `non_fast_forward`；`GET /rulesets/26036900` 返回 target=tag、include=`refs/tags/*`、bypass=`[]`、enforcement=active；两个文件 `LF == CRLF`
+- **备份**：`D:\Clearn\_backup\ghrules-20261028-195020\`
+
 ## Alpha 0.5.2 · 2026-10-28 · workhorse 加轮数硬顶 ＋ 小黄鸭视觉实测通过
 
 - **改了什么**：① `workhorse` frontmatter 加 `maxRounds: 30`（全局轮数兜底之外的单 agent 硬顶，防跑飞烧 token）② **实测确认 `rubber-duck` 的视觉能力**：拿 `_diag\page_001.png`（1075×1521）派给它，它用 `read_image` 直接看图、并用 Pillow 裁顶部 + 2× LANCZOS 放大后才读出字形差异，结论「候选 A：∮_Σ P dydz + Q dzdx + R dxdy = ∭_Ω (∂P/∂x)dV」与本机 `analyze_image` 的结论**一致** → 视觉可用，不是只能画图

@@ -262,9 +262,20 @@ python D:\Clearn\tools\release.py verify <工具> <通道>-<版本>
 | ③ **规模上限** | `max_turns` 硬顶 **40**、`timeout_sec` 硬顶 1800 s | 超出按上限执行 |
 | ④ **审计留痕** | 每次都写 `_diag\goose-audit.tsv`：时间 / 类型（`RUN` / `BLOCKED` / `TIMEOUT` / `SPAWN_FAIL` / `BAD_WORKDIR`）/ task 摘要（120 字）/ 结果 | 写不进不影响任务本身 |
 
-**这条守卫管不到什么（别误会）**：它防的是**手滑**（一句话里带出 `rm -rf`、顺手 `--force` 推送），**不是防刻意绕过** —— 真要绕还能拼字符串。硬边界仍在两处、且要单独配：**Windows 账户权限**（goose 跑在用户令牌下，能写的目录就是你能写的）＋ **GitHub 分支保护**（别让人 force-push 掉历史）。
+**这条守卫管不到什么（别误会）**：它防的是**手滑**（一句话里带出 `rm -rf`、顺手 `--force` 推送），**不是防刻意绕过** —— 真要绕还能拼字符串。硬边界仍在两处：**Windows 账户权限**（goose 跑在用户令牌下，能写的目录就是你能写的）＋ **GitHub 规则集**（见下条，已配）。
 
 **生效方式**：改完桥接脚本要 `mcp_manager_restart mcp-goose`（或重启 DSH）—— 已加载的 python 进程不会自己换代码。
+
+**服务端硬边界（GitHub 规则集，2026-10-28 已配并回读核验）**
+
+| 规则集 | 目标 | 作用 | 状态 |
+|---|---|---|---|
+| `main`（id 26035817） | `refs/heads/main` | `deletion` ＋ `non_fast_forward` → 删分支、`git push --force` 一律被服务端拒 | active，bypass **空** |
+| `tags`（id 26036900） | `refs/tags/*` | 同上 → 24 个 `<工具>/v*` tag 不会被删或被强改 | active，bypass **空** |
+
+- **bypass 为空 = 谁都不例外**：管理员、你本人、goose 都一样；这两条不靠自觉，是 GitHub 服务端执行。
+- 于是分层变成：**文本守卫（拦截手滑）→ 服务端规则（拦截一切强推/删分支）→ Windows 账户权限（限制能写哪）**。前两层已就位，第三层按需再说。
+- 核验方式（只读，要 GCM 凭据）：`GET /repos/<owner>/<repo>/rules/branches/main` 与 `GET /repos/<owner>/<repo>/rulesets/<id>`，看 `rules` / `bypass_actors` / `enforcement`。
 
 ## 🍳 固定流程的入口：Goose recipes（2026-10-08 新增）
 
