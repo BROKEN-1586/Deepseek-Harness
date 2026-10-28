@@ -4,6 +4,14 @@
 > **版本号真身**：`D:\Clearn\VERSION`（单行，机器读）—— 本文件是**给人读的历史**，最新在最上面。
 > 每条必带四样：**改了什么 / 涉及文件 / 验证 / 备份**。没验证的改动标 `⚠️ 未验证` 且**不占版本号**。
 
+## Alpha 0.6.3 · 2026-10-28 · office2pdf 双引擎 ＋ 识破 WPS 接管 ＋ T46
+
+- **改了什么**：① `tools\office2pdf.py` 加 `--engine wps|ms`（wps=WPS 默认，ms=Office 2021）② 加**实际服务检测**：读注册表 `LocalServer32`，发现 `--engine ms` 实际仍指向 `wps.exe` 时打印警告 ③ 修 GBK 控制台下 `⚠` 字符崩溃（改为 `[!]` ＋ `stdout.reconfigure(utf-8)`，T17 同族）④ `DEEPCODE.md` Office 节补引擎行与「Office 2021 的 COM 被 WPS 接管」说明 ⑤ `问题汇总` 新增 **T46**
+- **关键事实**：本机 Office 2021 已装，但 `Word/Excel/PowerPoint.Application` 三个 ProgID 在 HKLM 下都被指向 `wps.exe /Automation` → **`--engine ms` 目前等于 `--engine wps`**（同一 docx 导出 PDF 81 KB、creator 均为「WPS 文字」）
+- **涉及文件**：`tools\office2pdf.py`、`DEEPCODE.md`、`AGENTS.md`、`问题汇总\问题汇总.md`、`CHANGELOG.md`、`VERSION`、`VERSION.dsh`
+- **验证**：`--engine ms` 输出 `[!] 注意：Office 2021 的 ProgID 被 WPS 接管了（实际服务 = wps.exe）`；`--engine wps` 输出 `engine 实际服务 = wps.exe`；两份 PDF 页数 1、体积 81 KB、creator 一致；`py_compile` 通过
+- **备份**：`D:\Clearn\_backup\engine-20261028-202125\`
+
 ## Alpha 0.6.2 · 2026-10-28 · Office 渲染闭环改用 WPS COM ＋ 补 T45
 
 - **改了什么**：① 新建 `tools\office2pdf.py`：用本机 **WPS 的 COM**（`Kwps/Kwpp/KET.Application`）把 docx / pptx / xlsx 转 PDF，可选 `--png` 渲染 PNG、`--pages` 选页、`--force` 覆盖；补上「生成完能自己看版式」这一环，**不需要装 LibreOffice** ② `DEEPCODE.md` 新增「📄 Office 渲染链路（WPS COM）」节（链路 / 命令 / 解释器 / 硬限制 / 与 LibreOffice 的分工）③ `问题汇总` 新增 **T45**（COM 在沙箱内 `0x80080005`，别重试）④ `AGENTS.md` 脚本表加一行

@@ -36,6 +36,14 @@ WD_EXPORT_PDF = 17      # wdExportFormatPDF
 PP_SAVE_AS_PDF = 32     # ppSaveAsPDF
 XL_TYPE_PDF = 0         # xlTypePDF
 
+# 两套引擎（本机两套都装了，ProgID 不冲突）
+#   wps = WPS 教育版（Kwps/Kwpp/KET），起得快、轻，日常首选
+#   ms  = Office 2021 专业版（Word/PowerPoint/Excel），保真度最高，最终稿校对用
+ENGINES = {
+    "wps": {"word": "Kwps.Application", "ppt": "Kwpp.Application", "xls": "KET.Application"},
+    "ms": {"word": "Word.Application", "ppt": "PowerPoint.Application", "xls": "Excel.Application"},
+}
+
 
 def _need(name: str):
     try:
@@ -44,15 +52,44 @@ def _need(name: str):
         raise SystemExit(f"[x] 缺依赖 `{name}` —— 这个脚本要用系统 Python 跑（不是 DSH 自带的运行时）")
 
 
-def convert(src: Path, out: Path) -> tuple[bool, str]:
+def engine_server(engine: str) -> str:
+    """读注册表看这个 ProgID 实际指向哪个 exe（用于识破「WPS 接管了 Office ProgID」）。"""
+    import winreg
+
+    prog = ENGINES[engine]["word"]
+    try:
+        key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, rf"Software\Classes\{prog}\CLSID")
+        clsid, _ = winreg.QueryValueEx(key, "")
+        key2 = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, rf"Software\Classes\CLSID\{clsid}\LocalServer32")
+        path, _ = winreg.QueryValueEx(key2, "")
+        return path.strip('"').split(" /")[0].strip('"')
+    except OSError:
+        return ""
+
+
+def engine_note(engine: str) -> str:
+    srv = engine_server(engine)
+    if not srv:
+        return ""
+    low = srv.lower()
+    if engine == "ms" and "wps" in low:
+        return f"[!] 注意：Office 2021 的 ProgID 被 WPS 接管了（实际服务 = {os.path.basename(srv)}），本次仍走 WPS"
+    if engine == "wps" and "winword" in low:
+        return f"[!] 注意：WPS 的 ProgID 指向了 Word（实际服务 = {os.path.basename(srv)}）"
+    return f"engine 实际服务 = {os.path.basename(srv)}"
+
+
+def convert(src: Path, out: Path, engine: str = "wps") -> tuple[bool, str]:
     import win32com.client as win32
 
+    prog = ENGINES[engine]
     ext = src.suffix.lower()
+    note = engine_note(engine)
     started = time.time()
     app = None
     try:
         if ext in WORD_EXT:
-            app = win32.DispatchEx("Kwps.Application")
+            app = win32.DispatchEx(prog["word"])
             app.Visible = False
             try:
                 app.DisplayAlerts = 0
@@ -62,12 +99,12 @@ def convert(src: Path, out: Path) -> tuple[bool, str]:
             doc.ExportAsFixedFormat(str(out), WD_EXPORT_PDF)
             doc.Close(0)
         elif ext in PPT_EXT:
-            app = win32.DispatchEx("Kwpp.Application")
+            app = win32.DispatchEx(prog["ppt"])
             pres = app.Presentations.Open(str(src), ReadOnly=True, WithWindow=False)
             pres.SaveAs(str(out), PP_SAVE_AS_PDF)
             pres.Close()
         elif ext in XLS_EXT:
-            app = win32.DispatchEx("KET.Application")
+            app = win32.DispatchEx(prog["xls"])
             app.Visible = False
             try:
                 app.DisplayAlerts = False
@@ -92,7 +129,8 @@ def convert(src: Path, out: Path) -> tuple[bool, str]:
                 pass
     if not out.exists() or out.stat().st_size == 0:
         return False, "COM 返回成功但没生成 PDF"
-    return True, f"{out.stat().st_size / 1024:.0f} KB · {time.time() - started:.1f}s"
+    tail = f"{out.stat().st_size / 1024:.0f} KB · {time.time() - started:.1f}s"
+    return True, (tail + " · " + note) if note else tail
 
 
 def render(pdf: Path, dpi: int, pages: str | None, out_dir: Path) -> list[Path]:
@@ -120,12 +158,19 @@ def render(pdf: Path, dpi: int, pages: str | None, out_dir: Path) -> list[Path]:
 
 
 def main(argv: list[str]) -> int:
+    try:  # GBK 控制台下别被符号搞崩（T17 同族）
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
     ap = argparse.ArgumentParser(prog="office2pdf.py")
     ap.add_argument("inputs", nargs="+", help="docx / pptx / xlsx 路径")
     ap.add_argument("--out", help="输出 PDF（单文件时可用）")
     ap.add_argument("--png", type=int, metavar="DPI", help="转完再渲染 PNG，例：150")
     ap.add_argument("--pages", help="只渲染这些页，例：1-3,5（默认全部）")
     ap.add_argument("--force", action="store_true", help="覆盖已存在的输出")
+    ap.add_argument("--engine", choices=sorted(ENGINES), default="wps",
+                    help="wps=WPS（快，默认）／ms=Office 2021（保真度最高，最终稿校对用）")
     a = ap.parse_args(argv)
 
     if a.out and len(a.inputs) > 1:
@@ -143,8 +188,8 @@ def main(argv: list[str]) -> int:
         if out.exists() and not a.force:
             print(f"[skip] {out.name} 已存在（要覆盖加 --force）")
         else:
-            ok, note = convert(src, out)
-            print(f"[{'ok' if ok else 'x'}] {src.name} → {out.name} · {note}")
+            ok, note = convert(src, out, a.engine)
+            print(f"[{'ok' if ok else 'x'}] {src.name} → {out.name} · {note} · engine={a.engine}")
             if not ok:
                 rc = 2
                 continue

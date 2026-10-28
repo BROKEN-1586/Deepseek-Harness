@@ -309,9 +309,12 @@ python D:\Clearn\tools\office2pdf.py a.docx b.xlsx --png 120 --force
 | 解释器 | **系统 Python**（有 `win32com` ＋ `fitz`），不是 DSH 自带运行时 |
 | 硬限制 | 进程外 COM 在 DSH 沙箱（低完整性）里起不来：`0x80080005 服务器运行失败` → **沙箱外跑，或走 goose** |
 | 实测 | docx **5.8 s** / pptx **3.9 s** 各 1 页；中文、表格边框、`∑ ∫ ∂`、上下标、项目符号均正常 |
+| 引擎 | `--engine wps`（默认，实测 4.4 s）／`--engine ms`（走 Office 2021，实测 8.9 s） |
 | 归属 | 归 **goose 维护**（`tools\*.py` 老规矩）；DSH 只调用 + 看图 |
 
 **与 LibreOffice 的分工**：WPS 保真度高（中文办公文档最贴 Office）、零安装成本；LibreOffice 强在**无头批量**、无 UI 依赖、可脚本化。**现阶段不装 LibreOffice**；等要"一次转几十份"或"无桌面会话里跑"再上。
+
+**⛔ 本机 Office 2021 的 COM 已被 WPS 接管（2026-10-28 实测）**：`Word.Application` / `Excel.Application` / `PowerPoint.Application` 三个 ProgID 在 HKLM 下都被指向 `wps.exe /Automation`，所以 **`--engine ms` 目前实际仍走 WPS**（脚本会自动检测并打印 `[!] 注意：Office 2021 的 ProgID 被 WPS 接管了`）。要真用 Office 2021：在 WPS 的配置工具里取消「接管 / 兼容 Office」，或修注册表，之后 `--engine ms` 才有意义；不想动就别动，WPS 已经够日常用。
 
 ## 🍳 固定流程的入口：Goose recipes（2026-10-08 新增）
 
