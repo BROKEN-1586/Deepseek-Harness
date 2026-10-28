@@ -4,6 +4,13 @@
 > **版本号真身**：`D:\Clearn\VERSION`（单行，机器读）—— 本文件是**给人读的历史**，最新在最上面。
 > 每条必带四样：**改了什么 / 涉及文件 / 验证 / 备份**。没验证的改动标 `⚠️ 未验证` 且**不占版本号**。
 
+## Alpha 0.5.2 · 2026-10-28 · workhorse 加轮数硬顶 ＋ 小黄鸭视觉实测通过
+
+- **改了什么**：① `workhorse` frontmatter 加 `maxRounds: 30`（全局轮数兜底之外的单 agent 硬顶，防跑飞烧 token）② **实测确认 `rubber-duck` 的视觉能力**：拿 `_diag\page_001.png`（1075×1521）派给它，它用 `read_image` 直接看图、并用 Pillow 裁顶部 + 2× LANCZOS 放大后才读出字形差异，结论「候选 A：∮_Σ P dydz + Q dzdx + R dxdy = ∭_Ω (∂P/∂x)dV」与本机 `analyze_image` 的结论**一致** → 视觉可用，不是只能画图
+- **涉及文件**：`C:\Users\36578\.dsh\agents\workhorse.md`、`CHANGELOG.md`、`VERSION`、`AGENTS.md`
+- **验证**：加 `maxRounds` 后 workhorse 仍可派发（frontmatter 合法，返回「在」）；rubber-duck 与 `analyze_image` 两路结论互证；它临时生成的 2× 放大图已清理
+- **备份**：`D:\Clearn\_backup\agents-20261028-193347\`（三份 agent 改前原件）、`D:\Clearn\_backup\agents2-20261028-193923\`
+
 ## Alpha 0.5.1 · 2026-10-28 · 三个子代理修好（模型路由）＋ 补 T43
 
 - **改了什么**：`~/.dsh/agents` 下三个自定义子代理的 `model:` 全部写死在不存在的 provider 上（`volc-ark-plan` / `digitalvolvo`），派发必报 `no adapter registered for provider` → 三份定义**删掉 `model:` 行改为继承部署默认**（`deepseek-account/deepseek-flash`）；顺带修正 `workhorse` 描述里并不存在的 `workhorse-gate` 声明，三份都补了「项目语境」（先读 `AGENTS.md`、成熟流程交 goose、改资产要升号、记忆归 goose）与真实边界（DSH 沙箱：只能写 `D:\Clearn`）；`问题汇总` 新增 **T43**
