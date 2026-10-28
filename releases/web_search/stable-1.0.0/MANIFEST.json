@@ -1,0 +1,19 @@
+{
+  "tool": "web_search",
+  "channel": "stable",
+  "channel_label": "稳定",
+  "version": "1.0.0",
+  "released_at": "2026-10-28 19:56:09",
+  "source": [
+    "D:\\Clearn\\tools\\web_search.py"
+  ],
+  "files": [
+    {
+      "name": "web_search.py",
+      "size": 10788,
+      "sha256": "ebe9aa042cbbf6a3484d0e1c2ce81960e423e84b8e8306b422373e189c474a70"
+    }
+  ],
+  "git_head_before": "1adcbb195d0a73503785e46b92c2122e9777a8f0",
+  "python": "3.14.6"
+}
