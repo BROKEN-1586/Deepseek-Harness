@@ -1,0 +1,19 @@
+{
+  "tool": "syncflow",
+  "channel": "beta",
+  "channel_label": "基础功能完整、优化中",
+  "version": "0.2.0",
+  "released_at": "2026-10-28 19:56:11",
+  "source": [
+    "D:\\Clearn\\tools\\syncflow.py"
+  ],
+  "files": [
+    {
+      "name": "syncflow.py",
+      "size": 12611,
+      "sha256": "ea8b876aaf65b824f184bd9a17ba94543f8f07e36de551b78d3791db802c4eeb"
+    }
+  ],
+  "git_head_before": "352943365118fe9c9c7eff6a9974b06d461e643d",
+  "python": "3.14.6"
+}
