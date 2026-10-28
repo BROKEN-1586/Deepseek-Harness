@@ -292,6 +292,27 @@ python D:\Clearn\tools\release.py verify <工具> <通道>-<版本>
 - 于是分层变成：**文本守卫（拦截手滑）→ 服务端规则（拦截一切强推/删分支）→ Windows 账户权限（限制能写哪）**。前两层已就位，第三层按需再说。
 - 核验方式（只读，要 GCM 凭据）：`GET /repos/<owner>/<repo>/rules/branches/main` 与 `GET /repos/<owner>/<repo>/rulesets/<id>`，看 `rules` / `bypass_actors` / `enforcement`。
 
+### 📄 Office 渲染链路（WPS COM，2026-10-28 建）
+
+**为什么要有它**：生成 docx / pptx / xlsx 之后，得能"自己看一眼版式"才谈得上改对。本机**没有 LibreOffice**，但有 **WPS 教育版 12.1（COM 版本 14.0）**，三个 ProgID 全注册：`Kwps.Application` / `Kwpp.Application` / `KET.Application`（也注册了 `Word/Excel/PowerPoint.Application` 兼容名）。
+
+**链路**：python-docx / python-pptx / openpyxl 生成 → `tools\office2pdf.py`（WPS COM 导出 PDF）→ PyMuPDF 渲染 PNG → 看图 → 改稿。
+
+```bat
+python D:\Clearn\tools\office2pdf.py 稿子.docx --png 150
+python D:\Clearn\tools\office2pdf.py 稿子.pptx --png 150 --pages 1-3
+python D:\Clearn\tools\office2pdf.py a.docx b.xlsx --png 120 --force
+```
+
+| 项 | 值 |
+|---|---|
+| 解释器 | **系统 Python**（有 `win32com` ＋ `fitz`），不是 DSH 自带运行时 |
+| 硬限制 | 进程外 COM 在 DSH 沙箱（低完整性）里起不来：`0x80080005 服务器运行失败` → **沙箱外跑，或走 goose** |
+| 实测 | docx **5.8 s** / pptx **3.9 s** 各 1 页；中文、表格边框、`∑ ∫ ∂`、上下标、项目符号均正常 |
+| 归属 | 归 **goose 维护**（`tools\*.py` 老规矩）；DSH 只调用 + 看图 |
+
+**与 LibreOffice 的分工**：WPS 保真度高（中文办公文档最贴 Office）、零安装成本；LibreOffice 强在**无头批量**、无 UI 依赖、可脚本化。**现阶段不装 LibreOffice**；等要"一次转几十份"或"无桌面会话里跑"再上。
+
 ## 🍳 固定流程的入口：Goose recipes（2026-10-08 新增）
 
 **8 个固定流程已落成 recipes**，文件在 `D:\Clearn\.goose\recipes\`（项目级；工作目录须为 `D:\Clearn` 才会被发现）：

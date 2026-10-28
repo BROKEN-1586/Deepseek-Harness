@@ -4,6 +4,13 @@
 > **版本号真身**：`D:\Clearn\VERSION`（单行，机器读）—— 本文件是**给人读的历史**，最新在最上面。
 > 每条必带四样：**改了什么 / 涉及文件 / 验证 / 备份**。没验证的改动标 `⚠️ 未验证` 且**不占版本号**。
 
+## Alpha 0.6.2 · 2026-10-28 · Office 渲染闭环改用 WPS COM ＋ 补 T45
+
+- **改了什么**：① 新建 `tools\office2pdf.py`：用本机 **WPS 的 COM**（`Kwps/Kwpp/KET.Application`）把 docx / pptx / xlsx 转 PDF，可选 `--png` 渲染 PNG、`--pages` 选页、`--force` 覆盖；补上「生成完能自己看版式」这一环，**不需要装 LibreOffice** ② `DEEPCODE.md` 新增「📄 Office 渲染链路（WPS COM）」节（链路 / 命令 / 解释器 / 硬限制 / 与 LibreOffice 的分工）③ `问题汇总` 新增 **T45**（COM 在沙箱内 `0x80080005`，别重试）④ `AGENTS.md` 脚本表加一行
+- **涉及文件**：`tools\office2pdf.py`（**新**）、`DEEPCODE.md`、`AGENTS.md`、`问题汇总\问题汇总.md`、`CHANGELOG.md`、`VERSION`、`VERSION.dsh`
+- **验证**：沙箱外实测 `_work\probe.docx` → PDF 95 KB / 5.8 s、`_work\probe_deck.pptx` → PDF 68 KB / 3.9 s，各渲染 1 张 PNG；`analyze_image` 复核：中文、三列表格边框、`∑ ∫ ∂`、上下标、项目符号全部正常，无缺字；沙箱内调用则稳定复现 `0x80080005`（T45 判据）
+- **备份**：`D:\Clearn\_backup\office-20261028-201701\`
+
 ## Alpha 0.6.1 · 2026-10-28 · 补 T44（推送被 RST 的分块推法）
 
 - **改了什么**：`问题汇总` 新增 **T44** —— GitHub 大包推送被传输层重置（`curl 55` / `sideband packet`）的判据与修法：`http.version=HTTP/1.1` ＋ **按段 fast-forward 推**（`HEAD~16` → `HEAD~8` → `HEAD`）＋ tag 单独推 ＋ 回读 `ls-remote` 核对；「更新记录」加一行
