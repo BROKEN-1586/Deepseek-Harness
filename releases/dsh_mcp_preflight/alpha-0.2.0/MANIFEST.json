@@ -1,0 +1,19 @@
+{
+  "tool": "dsh_mcp_preflight",
+  "channel": "alpha",
+  "channel_label": "开发中",
+  "version": "0.2.0",
+  "released_at": "2026-10-28 19:56:24",
+  "source": [
+    "D:\\Clearn\\tools\\dsh_mcp_preflight.py"
+  ],
+  "files": [
+    {
+      "name": "dsh_mcp_preflight.py",
+      "size": 7975,
+      "sha256": "86c271e62399d3ebc7950a4caaaca64de9d94a54cb62d74550e68e6549572354"
+    }
+  ],
+  "git_head_before": "e932a9730a1540d1f97d5d6d4c8d9faa63c6f469",
+  "python": "3.14.6"
+}
