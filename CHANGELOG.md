@@ -4,6 +4,14 @@
 > **版本号真身**：`D:\Clearn\VERSION`（单行，机器读）—— 本文件是**给人读的历史**，最新在最上面。
 > 每条必带四样：**改了什么 / 涉及文件 / 验证 / 备份**。没验证的改动标 `⚠️ 未验证` 且**不占版本号**。
 
+## Alpha 0.6.0 · 2026-10-28 · 三层版本体系 ＋ 24 个工具定版
+
+- **改了什么**：① 新增**入口级版本**：`VERSION.goose` = `stable 1.0.0`（goose 整体，用户定 Stable）、`VERSION.dsh` = `alpha 0.6.0`（DSH 侧仍是 Alpha）；资产层 `VERSION` 同步升 `alpha 0.6.0` ② `DEEPCODE.md`「🏷️ 版本号规则」下新增「🧭 三层版本」小节（入口层 ×2 ＋ 资产层 ＋ 工具级，含「工具级与入口级不联动」等 4 条规则）③ **24 个工具全部定版**：stable 13 个升 `1.0.0`、beta 7 个升 `0.2.0`、alpha 4 个升 `0.2.0`，每个都发成 `releases\<工具>\<通道>-<版本>\` 快照 ＋ 独立 commit ＋ tag
+- **通道分配**：**stable**（daily_gate / followup / merge_and_sync / daily_0730 / tasks_syntax / stamp_backfill / backup_rotate / disk_audit / md2pdf / md2pdf_math / jpg2pdf / web_search / web_fetch）· **beta**（syncflow / ai_archive / reorg_desktop / cet4_shengci_flow / cet4_vocab_marks / annotate_folders / hw_from_courseware）· **alpha**（release / goose_mcp / dsh_mcp_preflight / cw_extract，cw_extract 因 T34 备注页缺陷压在 alpha）
+- **涉及文件**：`VERSION`、`VERSION.goose`（**新**）、`VERSION.dsh`（**新**）、`DEEPCODE.md`、`AGENTS.md`、`CHANGELOG.md`、`releases\`（24 个工具各 +1 版）
+- **验证**：`releases\00-索引\00-索引.md` 表内 24 行、通道与版本逐个对得上；`git tag` 从 24 涨到 **48**（每工具 0.1.0 ＋ 新版本）；`python tools\release.py list daily_gate` 显示 2 版、最新 stable-1.0.0
+- **备份**：`D:\Clearn\_backup\layers-20261028-195646\`
+
 ## Alpha 0.5.3 · 2026-10-28 · GitHub 服务端规则集补 tags ＋ 写进守卫节
 
 - **改了什么**：① 用 API 新建 tag 规则集（id 26036900：`refs/tags/*`、`deletion` ＋ `non_fast_forward`、bypass 空、active），补上原来只有 `main` 受保护的缺口 —— 24 个 `<工具>/v*` tag 从此不会被删或被强改 ② `DEEPCODE.md`「🛡️ goose 执行守卫」节加「服务端硬边界」表：两条规则集的目标 / 作用 / 状态，并把原来「GitHub 分支保护（要单独配）」改成「已配」，明确分层＝文本守卫 → 服务端规则 → 账户权限
