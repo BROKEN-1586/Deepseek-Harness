@@ -1,0 +1,19 @@
+{
+  "tool": "md2pdf_math",
+  "channel": "alpha",
+  "channel_label": "开发中",
+  "version": "0.1.0",
+  "released_at": "2026-10-28 19:14:01",
+  "source": [
+    "D:\\Clearn\\tools\\md2pdf_math.py"
+  ],
+  "files": [
+    {
+      "name": "md2pdf_math.py",
+      "size": 938,
+      "sha256": "3d53527072ae45033b5abcabf170d3b28c83a75da2b758d5c818ff5615a32763"
+    }
+  ],
+  "git_head_before": "aa63be8aceda6942c6f2c8e0aabf0b47ee6966d1",
+  "python": "3.14.6"
+}

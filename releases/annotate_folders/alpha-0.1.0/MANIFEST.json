@@ -1,0 +1,19 @@
+{
+  "tool": "annotate_folders",
+  "channel": "alpha",
+  "channel_label": "开发中",
+  "version": "0.1.0",
+  "released_at": "2026-10-28 19:13:59",
+  "source": [
+    "D:\\Clearn\\tools\\annotate_folders.py"
+  ],
+  "files": [
+    {
+      "name": "annotate_folders.py",
+      "size": 5292,
+      "sha256": "acc6e8f5611d231d9f703097ab906396e7e8995d074552151f40cc0012a6041d"
+    }
+  ],
+  "git_head_before": "aa63be8aceda6942c6f2c8e0aabf0b47ee6966d1",
+  "python": "3.14.6"
+}

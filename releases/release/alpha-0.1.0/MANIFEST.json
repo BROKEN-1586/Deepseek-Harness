@@ -1,0 +1,19 @@
+{
+  "tool": "release",
+  "channel": "alpha",
+  "channel_label": "开发中",
+  "version": "0.1.0",
+  "released_at": "2026-10-28 19:14:02",
+  "source": [
+    "D:\\Clearn\\tools\\release.py"
+  ],
+  "files": [
+    {
+      "name": "release.py",
+      "size": 12142,
+      "sha256": "046f68b5fc1c8f6f8c89bcb81adf5e3df5fb20d0e3d83ac724ecaed9bca24c71"
+    }
+  ],
+  "git_head_before": "aa63be8aceda6942c6f2c8e0aabf0b47ee6966d1",
+  "python": "3.14.6"
+}

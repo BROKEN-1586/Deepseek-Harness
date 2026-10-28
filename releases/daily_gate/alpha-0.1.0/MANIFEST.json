@@ -1,0 +1,19 @@
+{
+  "tool": "daily_gate",
+  "channel": "alpha",
+  "channel_label": "开发中",
+  "version": "0.1.0",
+  "released_at": "2026-10-28 19:14:00",
+  "source": [
+    "D:\\Clearn\\tools\\daily_gate.py"
+  ],
+  "files": [
+    {
+      "name": "daily_gate.py",
+      "size": 12801,
+      "sha256": "add22a4df1dfa8a3e6ce0c55eacbbec14d602fbf9e884f9e1e2240302626c6b6"
+    }
+  ],
+  "git_head_before": "aa63be8aceda6942c6f2c8e0aabf0b47ee6966d1",
+  "python": "3.14.6"
+}

@@ -1,0 +1,19 @@
+{
+  "tool": "backup_rotate",
+  "channel": "alpha",
+  "channel_label": "开发中",
+  "version": "0.1.0",
+  "released_at": "2026-10-28 19:13:59",
+  "source": [
+    "D:\\Clearn\\tools\\backup_rotate.py"
+  ],
+  "files": [
+    {
+      "name": "backup_rotate.py",
+      "size": 4210,
+      "sha256": "bcf786e6e4663c1603a2c77529318ddc7f97a70869c99e73dca014d00fca5f7f"
+    }
+  ],
+  "git_head_before": "aa63be8aceda6942c6f2c8e0aabf0b47ee6966d1",
+  "python": "3.14.6"
+}

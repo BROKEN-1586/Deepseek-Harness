@@ -1,0 +1,19 @@
+{
+  "tool": "goose_mcp",
+  "channel": "alpha",
+  "channel_label": "开发中",
+  "version": "0.1.0",
+  "released_at": "2026-10-28 19:14:00",
+  "source": [
+    "D:\\Clearn\\tools\\goose_mcp.py"
+  ],
+  "files": [
+    {
+      "name": "goose_mcp.py",
+      "size": 8888,
+      "sha256": "8d57ae0a6e1e57fb7564eb72b54112461ed83424ae11ffffe6c0e3f4a526b082"
+    }
+  ],
+  "git_head_before": "aa63be8aceda6942c6f2c8e0aabf0b47ee6966d1",
+  "python": "3.14.6"
+}

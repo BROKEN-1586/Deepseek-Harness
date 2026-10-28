@@ -1,0 +1,19 @@
+{
+  "tool": "daily_0730",
+  "channel": "alpha",
+  "channel_label": "开发中",
+  "version": "0.1.0",
+  "released_at": "2026-10-28 19:14:00",
+  "source": [
+    "D:\\Clearn\\tools\\daily_0730.bat"
+  ],
+  "files": [
+    {
+      "name": "daily_0730.bat",
+      "size": 683,
+      "sha256": "304b363fe640219c594fcb23e943cfbad75949a11fd02e3ad3f586ce547980e2"
+    }
+  ],
+  "git_head_before": "aa63be8aceda6942c6f2c8e0aabf0b47ee6966d1",
+  "python": "3.14.6"
+}

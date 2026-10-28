@@ -1,0 +1,19 @@
+{
+  "tool": "disk_audit",
+  "channel": "alpha",
+  "channel_label": "开发中",
+  "version": "0.1.0",
+  "released_at": "2026-10-28 19:14:00",
+  "source": [
+    "D:\\Clearn\\tools\\disk_audit.py"
+  ],
+  "files": [
+    {
+      "name": "disk_audit.py",
+      "size": 4990,
+      "sha256": "cdfdc74d820a18f80c533369212a2eb4a0ec1a1dd055b7e2173ef48417f4910a"
+    }
+  ],
+  "git_head_before": "aa63be8aceda6942c6f2c8e0aabf0b47ee6966d1",
+  "python": "3.14.6"
+}
