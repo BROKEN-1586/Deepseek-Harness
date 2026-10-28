@@ -4,6 +4,13 @@
 > **版本号真身**：`D:\Clearn\VERSION`（单行，机器读）—— 本文件是**给人读的历史**，最新在最上面。
 > 每条必带四样：**改了什么 / 涉及文件 / 验证 / 备份**。没验证的改动标 `⚠️ 未验证` 且**不占版本号**。
 
+## Alpha 0.3.1 · 2026-10-28 · 三件收尾落地（脚本归档 / 记忆分卷 / 详版备案）＋ DSH 重启核验
+
+- **改了什么**：① **U6** `_diag` 的 125 个一次性脚本 → `_diag\archive\scripts-20261028\`（只移不删，移动前做过活引用核对，仅剩问题汇总台账里的历史提及），根目录保留 8 个常备工具 ② **U12** `lessons-recent.md` 触发自己的滚动上限（完整条目只留 5 条）→ 6 条（10-24 ~ 10-27）整段切进 `memory\archive\lessons-2026-10-24_to-2026-10-28.md`，热区 341 → 228 行、留 5 条全文 ＋ 6 条一行索引 ③ **U21** 新建 `07-备案库\02-每日任务记录\2026-10-28.md`（详版备案，8 段），并把 `01-我的记录\2026-10.md` 里 5 处「🔗 详版：未建」改成指向本页 ④ **DSH 重启核验**（用户授权）：进程全清后重启 `D:\DSH Next\DSH NEXT.exe`
+- **涉及文件**：`D:\Clearn\_diag\`（125 个脚本移动）、`D:\AgentData\memory\lessons-recent.md`、`D:\AgentData\memory\archive\lessons-2026-10-24_to-2026-10-28.md`（**新**）、`Obsidian\07-备案库\02-每日任务记录\2026-10-28.md`（**新**）、`Obsidian\07-备案库\01-我的记录\2026-10.md`、`CHANGELOG.md`、`VERSION`、`AGENTS.md`
+- **验证**：① 移动后 `_diag` 根目录只剩预期的 8 个 `.py`（脚本内 `assert`）② 热区标题数 = 5（`assert`）、分卷 135 行纯 CRLF ③ 详版 65 行纯 CRLF；`archive-rag` 重建 **196 段**（8 个文件），探针 2 条均 top 命中新页 ④ 重启后 DSH 进程 5 个、`desktop-next.log` 新段 **0 条 `patch: … not found`**（对比 08:49 那次的 2 条）→ `insert:` 块被正常应用；进程表里 `goose_mcp.py`（PID 16584）与 `mcp_rag_bridge.py` 均在跑 → 两个 MCP client 真的拉起了服务
+- **备份**：`D:\backup\u12-<ts>\`、`D:\backup\u21-<ts>\`、`D:\backup\v031-<ts>\`
+
 ## Alpha 0.3.0 · 2026-10-28 · 清单链路收口：recipe 重写 ＋ syncflow 修 bug/扩教务页 ＋ 每日 07:30 零 token ＋ git 入库
 
 - **改了什么**：
