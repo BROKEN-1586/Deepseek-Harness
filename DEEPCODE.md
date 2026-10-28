@@ -220,6 +220,35 @@ cd /d D:\Clearn && set PYTHONIOENCODING=utf-8 && "C:\Users\36578\AppData\Local\P
 
 **回滚**：`CHANGELOG` 每条都带备份目录（`D:\backup\<名字>-<时间戳>\`）；回滚 ＝ 整份覆盖回去，版本号**降回上一号**，并在该条标 `⛔ 已回滚（原因）`。
 
+### 🧰 工具版本库（四通道 ＋ `releases\`，2026-10-28 定）
+
+**范围**：`D:\Clearn\tools\` 下的自研脚本（`.py` / `.bat` / `.ps1`，目前 24 个）。recipe / skill 不在内（各用自带版本字段或目录）。
+
+**四通道**（成熟度，不是序号；只能前进不能倒退）：
+
+| 通道 | 含义 |
+|---|---|
+| `alpha` | 开发中，接口随时会变 |
+| `beta` | 基础功能完整，正在优化 |
+| `stable` | 稳定可用 |
+| `ultra` | 最终版；**仍可继续发 `ultra.x`**（2026-10-28 用户定） |
+
+**落点**：`releases\<工具>\<通道>-<版本>\` —— 每版一个只读快照，**不覆盖旧版**：
+脚本副本 ＋ `MANIFEST.json`（sha256 / 来源 / 环境 / 发布前 commit）＋ `改了什么.md`；总表 `releases\00-索引\00-索引.md`。
+
+**发布 = 目录 ＋ 一次 commit ＋ 一个 tag**（tag 名 `<工具>/v<版本>`）。仓库暂无 remote：先本地提交，配好 remote 后 `git push --tags` 即可。
+
+**指令**（默认预演，`--apply` 才写）：
+
+```bat
+python D:\Clearn\tools\release.py publish <工具> --channel beta --version 0.2.0 --note "这版改了什么"
+python D:\Clearn\tools\release.py baseline --channel alpha --version 0.1.0   :: 全部脚本打基线
+python D:\Clearn\tools\release.py list [<工具>]
+python D:\Clearn\tools\release.py verify <工具> <通道>-<版本>
+```
+
+**硬规则**：① 通道只能前进、版本号只能变大、目标目录不能已存在（三条都在写盘前校验，不过就一条都不写）；② 每次发布后跑一次 `verify` 核 sha256；③ `releases\` 是只读快照 —— **改代码只改 `tools\`**，快照不参与运行、不被其它脚本 import。
+
 ## 🍳 固定流程的入口：Goose recipes（2026-10-08 新增）
 
 **8 个固定流程已落成 recipes**，文件在 `D:\Clearn\.goose\recipes\`（项目级；工作目录须为 `D:\Clearn` 才会被发现）：

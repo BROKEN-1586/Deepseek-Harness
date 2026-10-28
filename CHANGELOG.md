@@ -4,6 +4,14 @@
 > **版本号真身**：`D:\Clearn\VERSION`（单行，机器读）—— 本文件是**给人读的历史**，最新在最上面。
 > 每条必带四样：**改了什么 / 涉及文件 / 验证 / 备份**。没验证的改动标 `⚠️ 未验证` 且**不占版本号**。
 
+## Alpha 0.4.0 · 2026-10-28 · 工具版本库：四通道快照 ＋ git tag
+
+- **改了什么**：新建 `tools\release.py`（`publish` / `baseline` / `list` / `verify`，默认预演）；把 `tools\` 下 **24 个脚本**按 `alpha-0.1.0` 打成基线，落 `releases\<工具>\alpha-0.1.0\`（脚本副本 ＋ `MANIFEST.json` ＋ `改了什么.md`）＋ 总表 `releases\00-索引\00-索引.md`；一次 commit ＋ 24 个 tag（`<工具>/v0.1.0`）。`DEEPCODE.md`「🏷️ 版本号规则」下新增「🧰 工具版本库（四通道）」小节，`AGENTS.md` 脚本表加一行
+- **四通道**：`alpha`（开发中）→ `beta`（基础功能完整、优化中）→ `stable`（稳定）→ `ultra`（最终版，仍可继续 `ultra.x`）；通道只能前进、版本号只能变大、目标目录不能已存在（写盘前校验）
+- **涉及文件**：`tools\release.py`（**新**）、`releases\`（**新**，25 个目录）、`DEEPCODE.md`、`AGENTS.md`、`CHANGELOG.md`、`VERSION`
+- **验证**：`baseline` 24/24 写入且一次 commit；`verify followup alpha-0.1.0` sha256 通过；`list` 输出正常；三条校验实测生效（`beta 0.2.0` 允许、`alpha 0.0.9` 被拒）；`git tag` 24 个
+- **备份**：`D:\Clearn\_backup\relrule-20261028-191429\`（四个文本文件改前副本）
+
 ## Alpha 0.3.4 · 2026-10-28 · 定「成熟即交 goose」的路由判据
 
 - **改了什么**：`AGENTS.md` 的「入口分工」节新增 **路由判定** —— 五条判据（跑通过至少一次 / 有固定入口 / 落点清楚 / 可回滚 / 不需要 DSH 独占能力）全满足才整块交给 goose，否则留在 DSH；给出两边的默认清单（goose：固定脚本 ＋ 8 个 recipe ＋ 笔记 / 库 / 清单同步；DSH：新能力试验、Office / `.univer`、逐步排查、以及「产出 → 沉淀」本身），并规定交接 task 必须自足且写明预期产物与验证判据
