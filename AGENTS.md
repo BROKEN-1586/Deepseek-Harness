@@ -2,7 +2,7 @@
 
 > ⚠️ **本文件是「入口」，不是「真身」。**
 > **真身**：`D:\Clearn\DEEPCODE.md`（一直在维护，**不要在这里重复规则内容**）。
-> 🦢 当前运行框架 = **Goose**（2026-10-08 确认）。　🏷️ **当前版本：Alpha 0.6.4**（资产层 `VERSION`）｜**goose 入口 `stable 1.0.0`**（`VERSION.goose`）｜**DSH 入口 `alpha 0.6.4`**（`VERSION.dsh`） —— 三层版本规则见 `DEEPCODE.md`「🧭 三层版本」，历史在 `CHANGELOG.md`。**每次有效改动都要升号**（用户 2026-10-28 定，规则见 `DEEPCODE.md`「🏷️ 版本号规则」；一个任务一只号、没验证不升、汇报第一行报版本）
+> 🦢 当前运行框架 = **Goose**（2026-10-08 确认）。　🏷️ **当前版本：Alpha 0.6.5**（资产层 `VERSION`）｜**goose 入口 `stable 1.0.0`**（`VERSION.goose`）｜**DSH 入口 `alpha 0.6.5`**（`VERSION.dsh`） —— 三层版本规则见 `DEEPCODE.md`「🧭 三层版本」，历史在 `CHANGELOG.md`。**每次有效改动都要升号**（用户 2026-10-28 定，规则见 `DEEPCODE.md`「🏷️ 版本号规则」；一个任务一只号、没验证不升、汇报第一行报版本）
 
 ## 🔴 第一步（每次会话都做，别跳）
 
@@ -70,7 +70,7 @@
 | Obsidian 笔记库 | `C:\Users\36578\Nutstore\1\我的坚果云\Obsidian\<NN-库名>\`（每个子文件夹是独立库，带 `.obsidian`） |
 | 任务清单库（**非 RAG**） | `D:\任务清单\`（`01-作业清单` ＋ `02-教务清单`＋`00-总览`）—— 旧 `D:\日程规划` **已删**（2026-10-27） |
 | 记忆 / 备案 | `D:\AgentData\memory\`（索引 `MEMORY.md`） |
-| 固定流程 recipes | `D:\Clearn\.goose\recipes\`（8 个：rag-rebuild / note-pipeline / read-the-night / weekly-review / **merge-sync** / **img-ingest** / **closeout** / **export-note**；2026-10-28 全量 `goose recipe validate` **8/8 通过**） |
+| 固定流程 recipes | `D:\Clearn\.goose\recipes\`（9 个：rag-rebuild / note-pipeline / read-the-night / weekly-review / **merge-sync** / **img-ingest** / **closeout** / **export-note** / **office-render**；2026-10-28 新增 office-render 并 `goose recipe validate` ✓，此前 8/8 通过） |
 | 问题 / 踩坑汇总 | `D:\Clearn\问题汇总\问题汇总.md`（问题 → 措施 → 来源，分 5 区；**非 RAG，改动不需重建索引**） |
 
 ## 常用脚本
@@ -137,7 +137,7 @@
 | ④ **可回滚** | 脚本自带 dry-run 或备份 |
 | ⑤ **不需要 DSH 独占能力** | 不涉及 Office 生成转换、`.univer` 编辑、slide 渲染 / lint |
 
-- **直接交 goose（免反复授权）**：`daily_gate` / `followup` / `syncflow` / `merge_and_sync` / `daily_0730`、8 个 recipe、笔记整理与 Obsidian 库、RAG 批量重建、任务清单同步
+- **直接交 goose（免反复授权）**：`daily_gate` / `followup` / `syncflow` / `merge_and_sync` / `daily_0730`、9 个 recipe、笔记整理与 Obsidian 库、RAG 批量重建、任务清单同步
 - **留在 DSH**：新能力试验、需求还没定型、Office / `.univer` 产出、要逐步判断的排查（例：2026-10-28 的权限问题）、以及「DSH 产出 → 沉淀成 `tools\*.py` / recipe」这一步本身
 - **交接要求**：task 必须自足（路径 / 日期 / 文件名 / 参数原样抄）＋ 写明**预期产物与验证判据**；goose 不共享本会话上下文
 - **判据只看「验没验证过」，不看「谁写的」**；成熟后同一件事**只留 goose 一处实现**（重叠区禁令照样适用）

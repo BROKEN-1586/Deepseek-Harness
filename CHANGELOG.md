@@ -4,6 +4,13 @@
 > **版本号真身**：`D:\Clearn\VERSION`（单行，机器读）—— 本文件是**给人读的历史**，最新在最上面。
 > 每条必带四样：**改了什么 / 涉及文件 / 验证 / 备份**。没验证的改动标 `⚠️ 未验证` 且**不占版本号**。
 
+## Alpha 0.6.5 · 2026-10-28 · 三个尾巴收掉：office-render recipe ＋ office2pdf 发版 ＋ 备案补齐
+
+- **改了什么**：① 新建 `.goose\recipes\office-render.yaml`（第 9 个 recipe）：一条命令把 docx/pptx/xlsx 转 PDF 再渲染 PNG，含判据与「必须在沙箱外跑」的说明 ② `office2pdf` 发首个版本 **alpha-0.1.0**（`releases\office2pdf\alpha-0.1.0\`，tag `office2pdf/v0.1.0`，sha256 校验通过）③ 今晚 0.3.2 → 0.6.4 共 14 个版本补进备案 `07-备案库\02-每日任务记录\2026-10-28.md`（新增 24 行）④ 备案条目按该文件既有习惯**从顶部挪到末尾**（该文件是时间升序），开头「覆盖 17:22 ~ 18:12」更新为「~ 20:3x」
+- **涉及文件**：`.goose\recipes\office-render.yaml`（**新**）、`releases\office2pdf\alpha-0.1.0\`（**新**）、`DEEPCODE.md`、`AGENTS.md`、`CHANGELOG.md`、`VERSION`、`VERSION.dsh`；库外：`07-备案库\02-每日任务记录\2026-10-28.md`
+- **验证**：`goose recipe validate` → `✓ recipe file is valid`；`release.py verify office2pdf alpha-0.1.0` → 1 个文件 sha256 通过；备案回读 0 个孤立 LF、节顺序 17:22 → … → 20:3x、原 65 行逐字未动（改前备份 `D:\backup\beian-20261028-2030\` 与 `_backup\beian-fix-*`）
+- **备份**：`D:\Clearn\_backup\closing-20261028-203233\`
+
 ## Alpha 0.6.4 · 2026-10-28 · 借 DeepInfer 两条：规则攒批改 ＋ 起草-校验
 
 - **改了什么**：① `DEEPCODE.md` 新增「🧠 从 DeepInfer 借的两条」节 —— ①**规则文件攒批改**（对应前缀缓存/槽位复用：规则文件每改一次会话前缀就失效，同任务内改 ≥2 次就先攒着）②**起草-校验**（对应投机解码 draft→verify：复杂改动 = workhorse 起草 → oldfox 按 blocker / concern / suggestion 审；触发条件＝改脚本 >50 行 / 动规则口径 / 涉权限安全 / 已改一轮仍不确定）③ 记下另外三条暂缓项（有界回放 / 结构化输出校验 / 异步调度）④ §C 路由表加一行指针

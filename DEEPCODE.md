@@ -338,7 +338,7 @@ python D:\Clearn\tools\office2pdf.py a.docx b.xlsx --png 120 --force
 
 ## 🍳 固定流程的入口：Goose recipes（2026-10-08 新增）
 
-**8 个固定流程已落成 recipes**，文件在 `D:\Clearn\.goose\recipes\`（项目级；工作目录须为 `D:\Clearn` 才会被发现）：
+**9 个固定流程已落成 recipes**，文件在 `D:\Clearn\.goose\recipes\`（项目级；工作目录须为 `D:\Clearn` 才会被发现）：
 
 | recipe | 对应流程 | 与本文件的关系（2026-10-11 实测核对） |
 |---|---|---|
@@ -350,6 +350,7 @@ python D:\Clearn\tools\office2pdf.py a.docx b.xlsx --png 120 --force
 | `img-ingest` | 批量截图 / 扫描版 PDF → 结构化表（2026-10-20 建） | **操作版**（规模分流表 + 抽取式提问 + 待核对）。本文件 §⚠️ 工具坑：批量读截图、§📚 各科教材来源（扫描版判据）保留**原理**：为何图不释放、为何按内容归科 |
 | `closeout` | 挂索引 → 重建一次 → 探针（2026-10-20 建） | **操作版**（顺序 + Ollama 硬前置 + 并发保护 + 探针判据 + 汇报三件）。本文件 §笔记改动后必须重建 RAG 索引 保留**细节**：8 库表、db 名映射、各库笔记目录 |
 | `export-note` | 笔记 → PDF / Word（2026-10-20 建） | **操作版**（选路表 + 三个坑 + 回读自检）。本文件 §导出笔记、§`md2pdf.py` 保留**背景**：export_pdf 为何拆坏公式、autoload 为何必须关 |
+| `office-render` | Office 文件 → PDF → PNG 看版式（2026-10-28 建） | **操作版**（一条命令 ＋ 判据 ＋ 沙箱限制）。本文件「📄 Office 渲染链路（WPS COM）」保留**背景**：为何走 WPS、`0x80080005`、引擎被接管 |
 
 - 查看清单（CLI）：`goose recipe list`；Desktop 想用需 侧边栏 → `Recipes` → `Import Recipe` → `Recipe File` 各导入一次。
 - ⚠️ **Desktop 全局库是「快照」，以项目文件为准**（2026-10-20 定）：导入会把 yaml **重新序列化复制**到 `%APPDATA%\Block\goose\config\recipes\`（按 `title` 命名，体积会变），之后改项目文件**不会同步**。用户 2026-10-20 选「纯对话」→ 全局副本已删，只留 `D:\Clearn\.goose\recipes\` 这一份真身；**将来若再导入，改 recipe 时必须同步覆盖那几份**，否则侧边栏跑的是旧版。
@@ -1516,7 +1517,7 @@ python D:\Clearn\tools\merge_and_sync.py --apply    ← 真写（先备份到 D:
 | 节 | 管什么（一句话） | 最后修订 |
 |---|---|---|
 | 🧭 先读这一屏：硬性要求速查 + 任务路由 | 漏了就出错的全部要求（A 铁律 / B 不许 / C 路由 / D 收尾 / E 启动 ＋ MCP 无会话任务例外） | 2026-10-28 |
-| 🍳 固定流程的入口：Goose recipes | 8 个 recipe 的用途、调用方式、validate 口径 | 2026-10-20 |
+| 🍳 固定流程的入口：Goose recipes | 9 个 recipe 的用途、调用方式、validate 口径 | 2026-10-20 |
 | 笔记改动后必须重建 RAG 索引 | Ollama 硬前置、`--build --force`、成功判据、只建一次 | 2026-10-07 |
 | 画图：`plot_function` | 函数图工具与五个必踩的坑 | — |
 | 导出笔记：`export_docx` / `export_pdf` | 导出两条路；数学笔记别用 `export_pdf` | — |
