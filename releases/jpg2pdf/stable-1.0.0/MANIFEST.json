@@ -1,0 +1,19 @@
+{
+  "tool": "jpg2pdf",
+  "channel": "stable",
+  "channel_label": "稳定",
+  "version": "1.0.0",
+  "released_at": "2026-10-28 19:56:07",
+  "source": [
+    "D:\\Clearn\\tools\\jpg2pdf.py"
+  ],
+  "files": [
+    {
+      "name": "jpg2pdf.py",
+      "size": 4275,
+      "sha256": "f66738eecab466b4fe70fb8c8e5d4344d6f7bf9bac00d1410af6ca983829855a"
+    }
+  ],
+  "git_head_before": "3bea93c86a62172029a338c4c4988572e35503c2",
+  "python": "3.14.6"
+}
